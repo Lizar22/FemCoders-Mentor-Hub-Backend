@@ -33,9 +33,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MentorProfile> mentorProfiles = new ArrayList<>();
+    @OneToOne(mappedBy = "user")
+    private MentorProfile mentorProfiles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MenteeProfile> menteeProfiles = new ArrayList<>();
+    @OneToOne(mappedBy = "user")
+    private MenteeProfile menteeProfiles;
 }
