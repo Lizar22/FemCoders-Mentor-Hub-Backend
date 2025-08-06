@@ -3,16 +3,15 @@ package com.fcmh.femcodersmentorhub.auth;
 import com.fcmh.femcodersmentorhub.mentees.MenteeProfile;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -33,9 +32,18 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user")
+    //mappedBy = "user"
+    @OneToOne
     private MentorProfile mentorProfiles;
 
-    @OneToOne(mappedBy = "user")
+    //mappedBy = "user"
+    @OneToOne
     private MenteeProfile menteeProfiles;
+
+    public User(String username, String email, String password, Role role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
