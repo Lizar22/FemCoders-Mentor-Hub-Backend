@@ -32,9 +32,4 @@ public class UserAuthServiceImpl implements UserAuthService {
         UserAuth savedUser = userAuthRepository.save(newUser);
         return userAuthMapper.entityToDto(savedUser);
     }
-
-    @Override
-    public UserAuthResponse authenticateUser(String email, String password) {
-        return null;
-    }
 }
