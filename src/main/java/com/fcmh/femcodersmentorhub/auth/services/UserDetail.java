@@ -1,17 +1,17 @@
 package com.fcmh.femcodersmentorhub.auth.services;
 
+import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
 public class UserDetail implements UserDetails {
-    private final User user;
+    private final UserAuth user;
 
-    public UserDetail(User user) {
+    public UserDetail(UserAuth user) {
         this.user = user;
     }
 
