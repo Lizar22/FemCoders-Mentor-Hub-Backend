@@ -1,6 +1,6 @@
 package com.fcmh.femcodersmentorhub.auth.dtos;
 
-import com.fcmh.femcodersmentorhub.auth.Role;
+import com.fcmh.femcodersmentorhub.security.Role;
 import jakarta.validation.constraints.*;
 
 public record UserAuthRequest(
@@ -18,7 +18,7 @@ public record UserAuthRequest(
                  regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=.])(?=\\S+$).{12,}$")
         String password,
 
-        @NotNull(message = "Role is required. You must choose between Mentor or Mentee")
+        @NotNull(message = "Role is required. You must choose between MENTOR or MENTEE")
         Role role
 ){
 }

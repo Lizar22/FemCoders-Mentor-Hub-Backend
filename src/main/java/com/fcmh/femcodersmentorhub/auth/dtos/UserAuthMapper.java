@@ -1,7 +1,9 @@
 package com.fcmh.femcodersmentorhub.auth.dtos;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserAuthMapper {
     public static UserAuth dtoToEntity(UserAuthRequest dto) {
         return new UserAuth(
