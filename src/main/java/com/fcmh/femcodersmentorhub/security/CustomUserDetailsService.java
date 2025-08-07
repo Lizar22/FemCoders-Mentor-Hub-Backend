@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<UserAuth> user = userAuthRepository.findByUsername(identifier);
 
         if (user.isEmpty()) {
-            user = userAuthRepository.findByUserEmail(identifier);
+            user = userAuthRepository.findByEmail(identifier);
         }
 
         return user.map(userEntity -> new CustomUserDetails(userEntity))
