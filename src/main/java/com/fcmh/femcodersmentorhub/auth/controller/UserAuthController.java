@@ -8,9 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/auth")
 public class UserAuthController {
     private final UserAuthServiceImpl userAuthServiceImpl;
 
@@ -19,7 +21,8 @@ public class UserAuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserAuthResponse> addUser(@RequestBody @Valid UserAuthRequest userAuthRequest) {
-        return new ResponseEntity<>(userAuthServiceImpl.addUser(userAuthRequest), HttpStatus.CREATED);
+    public ResponseEntity<UserAuthResponse> registerUser(@RequestBody @Valid UserAuthRequest userAuthRequest) {
+        UserAuthResponse userAuthResponse = userAuthServiceImpl.addUser(userAuthRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userAuthResponse);
     }
 }
