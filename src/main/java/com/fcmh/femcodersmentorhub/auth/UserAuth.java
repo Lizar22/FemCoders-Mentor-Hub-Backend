@@ -2,19 +2,16 @@ package com.fcmh.femcodersmentorhub.auth;
 
 import com.fcmh.femcodersmentorhub.mentees.MenteeProfile;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
+import com.fcmh.femcodersmentorhub.security.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,7 +37,7 @@ public class User {
     @OneToOne
     private MenteeProfile menteeProfiles;
 
-    public User(String username, String email, String password, Role role) {
+    public UserAuth(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;

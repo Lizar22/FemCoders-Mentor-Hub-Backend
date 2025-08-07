@@ -1,23 +1,23 @@
-package com.fcmh.femcodersmentorhub.auth.services;
+package com.fcmh.femcodersmentorhub.security;
 
+import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
-public class UserDetail implements UserDetails {
-    private final User user;
+public class CustomUserDetails implements UserDetails {
+    private final UserAuth user;
 
-    public UserDetail(User user) {
+    public CustomUserDetails(UserAuth user) {
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.toString()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().toString()));
     }
 
     @Override

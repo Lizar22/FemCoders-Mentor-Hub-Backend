@@ -1,9 +1,9 @@
 package com.fcmh.femcodersmentorhub.auth.dtos;
 
-import com.fcmh.femcodersmentorhub.auth.Role;
+import com.fcmh.femcodersmentorhub.security.Role;
 import jakarta.validation.constraints.*;
 
-public record UserRequest (
+public record UserAuthRequest(
         @NotBlank(message = "Username is required")
         @Size(min = 2, max = 50, message = "Username must contain between 2 and 50 characters")
         String username,
@@ -18,7 +18,7 @@ public record UserRequest (
                  regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=.])(?=\\S+$).{12,}$")
         String password,
 
-        @NotNull(message = "Role is required. You must choose between Mentor or Mentee")
+        @NotNull(message = "Role is required. You must choose between MENTOR or MENTEE")
         Role role
 ){
 }

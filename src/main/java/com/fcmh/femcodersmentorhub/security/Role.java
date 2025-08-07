@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.auth;
+package com.fcmh.femcodersmentorhub.security;
 
 public enum Role {
     MENTOR,

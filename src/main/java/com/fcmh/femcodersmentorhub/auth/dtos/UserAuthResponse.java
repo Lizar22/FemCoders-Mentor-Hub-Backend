@@ -1,8 +1,8 @@
 package com.fcmh.femcodersmentorhub.auth.dtos;
 
-import com.fcmh.femcodersmentorhub.auth.Role;
+import com.fcmh.femcodersmentorhub.security.Role;
 
-public record UserResponse (
+public record UserAuthResponse(
         String username,
         String email,
         Role role
