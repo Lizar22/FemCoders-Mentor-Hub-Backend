@@ -3,7 +3,7 @@ package com.fcmh.femcodersmentorhub.auth.dtos;
 import com.fcmh.femcodersmentorhub.auth.Role;
 import jakarta.validation.constraints.*;
 
-public record UserRequest (
+public record UserAuthRequest(
         @NotBlank(message = "Username is required")
         @Size(min = 2, max = 50, message = "Username must contain between 2 and 50 characters")
         String username,

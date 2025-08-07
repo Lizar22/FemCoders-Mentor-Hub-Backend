@@ -2,5 +2,5 @@ package com.fcmh.femcodersmentorhub.auth;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository <User, Long> {
+public interface UserAuthRepository extends JpaRepository <UserAuth, Long> {
 }
