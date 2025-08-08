@@ -16,15 +16,10 @@ import java.util.Date;
 public class JwtService {
 
     @Value("${jwt.secret.key}")
-    private final String jwtSecretKey;
+    private String jwtSecretKey;
 
     @Value("${jwt.expiration:1800000}")
-    private final Long jwtExpiration;
-
-    public JwtService(String jwtSecretKey, Long jwtExpiration) {
-        this.jwtSecretKey = jwtSecretKey;
-        this.jwtExpiration = jwtExpiration;
-    }
+    private Long jwtExpiration;
 
     public String generateToken(CustomUserDetails userDetails) {
         return buildToken(userDetails, jwtExpiration);
