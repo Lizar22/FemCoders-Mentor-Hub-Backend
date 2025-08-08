@@ -22,7 +22,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         @Override
     public UserAuthResponse findUserById(Long id) {
-        return null;
+        UserAuth user = userAuthRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        return UserAuthMapper.entityToDto(user);
     }
 
     @Override
