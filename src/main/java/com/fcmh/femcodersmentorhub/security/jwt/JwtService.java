@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,20 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private final String JWT_SECRET_KEY = "UKaEzyvhZkfbQLNfyjkgs202JLAyI6wVkoCoeX6fqMEyRsYQOWqSXt7EAJ7wAWEaADIJGKM7MqjDxy3ASakMmVUVJWwdALay9xXJBK6Y9rL2NXzWX4kpeByFWTWwt89lfFmytwYIf6EF063ywu88TLKLVztbjBAKiv5QeZ4PvrABQ9m3ZwzMWL8PiSW7DLqtD95SRsaYrkVSW4j1x8TiYlVJChgSycbceBBQgHGa8lxAuGeZZRGIMkIPtPWmN6CO";
-    private final Long JWT_EXPIRATION = 1800000L;
+
+    @Value("${jwt.secret.key}")
+    private final String jwtSecretKey;
+
+    @Value("${jwt.expiration:1800000}")
+    private final Long jwtExpiration;
+
+    public JwtService(String jwtSecretKey, Long jwtExpiration) {
+        this.jwtSecretKey = jwtSecretKey;
+        this.jwtExpiration = jwtExpiration;
+    }
 
     public String generateToken(CustomUserDetails userDetails) {
-        return buildToken(userDetails, JWT_EXPIRATION);
+        return buildToken(userDetails, jwtExpiration);
     }
 
     private String buildToken(CustomUserDetails userDetails, Long jwtExpiration) {
@@ -71,7 +81,7 @@ public class JwtService {
     }
 
     private SecretKey getSignKey() {
-        byte[] bytes = Decoders.BASE64.decode(JWT_SECRET_KEY);
+        byte[] bytes = Decoders.BASE64.decode(jwtSecretKey);
         return Keys.hmacShaKeyFor(bytes);
     }
 }
