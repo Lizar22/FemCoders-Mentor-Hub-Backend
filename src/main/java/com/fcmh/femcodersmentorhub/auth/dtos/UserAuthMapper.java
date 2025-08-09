@@ -6,12 +6,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserAuthMapper {
     public static UserAuth dtoToEntity(UserAuthRequest dto) {
-        return new UserAuth(
-                dto.username(),
-                dto.email(),
-                dto.password(),
-                dto.role()
-        );
+        return UserAuth.builder()
+                .username(dto.username().trim())
+                .email(dto.email().trim())
+                .password(dto.password().trim())
+                .role(dto.role()).build();
     }
 
     public static UserAuthResponse entityToDto(UserAuth userAuth) {

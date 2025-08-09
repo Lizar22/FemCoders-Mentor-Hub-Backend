@@ -5,9 +5,11 @@ import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserAuthRepository userAuthRepository;
 
