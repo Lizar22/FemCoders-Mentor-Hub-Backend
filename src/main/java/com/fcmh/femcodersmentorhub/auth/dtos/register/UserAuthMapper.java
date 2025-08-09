@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.auth.dtos;
+package com.fcmh.femcodersmentorhub.auth.dtos.register;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import org.springframework.stereotype.Component;
