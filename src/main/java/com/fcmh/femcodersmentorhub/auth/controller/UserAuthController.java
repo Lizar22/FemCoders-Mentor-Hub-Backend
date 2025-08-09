@@ -1,5 +1,6 @@
 package com.fcmh.femcodersmentorhub.auth.controller;
 
+import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginResponse;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
@@ -37,8 +38,8 @@ public class UserAuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody UserAuthRequest userRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.username(), userRequest.password()));
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.identifier(), request.password()));
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
