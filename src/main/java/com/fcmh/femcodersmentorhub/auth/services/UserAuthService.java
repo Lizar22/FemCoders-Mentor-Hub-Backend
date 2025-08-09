@@ -1,7 +1,7 @@
 package com.fcmh.femcodersmentorhub.auth.services;
 
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthRequest;
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 
 public interface UserAuthService {
     UserAuthResponse findUserById(Long id);

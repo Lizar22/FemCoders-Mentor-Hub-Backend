@@ -1,8 +1,8 @@
 package com.fcmh.femcodersmentorhub.auth.controller;
 
-import com.fcmh.femcodersmentorhub.auth.dtos.JwtResponse;
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthRequest;
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginResponse;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
@@ -37,14 +37,14 @@ public class UserAuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody UserAuthRequest userRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserAuthRequest userRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.username(), userRequest.password()));
 
-        CustomUserDetails userDetail = (CustomUserDetails) authentication.getPrincipal();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String token = jwtService.generateToken(userDetail);
+        String token = jwtService.generateToken(userDetails);
 
-        JwtResponse jwtResponse = new JwtResponse(token);
-        return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
+        LoginResponse loginResponse = new LoginResponse(token, "Login successful");
+        return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
 }

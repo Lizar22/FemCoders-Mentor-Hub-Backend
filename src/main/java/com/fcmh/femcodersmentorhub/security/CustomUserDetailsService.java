@@ -26,6 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         return user.map(userEntity -> new CustomUserDetails(userEntity))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with " + identifier));
     }
 }
