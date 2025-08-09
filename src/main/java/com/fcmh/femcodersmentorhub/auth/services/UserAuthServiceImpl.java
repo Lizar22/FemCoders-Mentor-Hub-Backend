@@ -2,9 +2,9 @@ package com.fcmh.femcodersmentorhub.auth.services;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthMapper;
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthRequest;
-import com.fcmh.femcodersmentorhub.auth.dtos.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthMapper;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
+import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         this.userAuthMapper = userAuthMapper;
     }
 
-        @Override
+    @Override
     public UserAuthResponse findUserById(Long id) {
         UserAuth user = userAuthRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
         return UserAuthMapper.entityToDto(user);
