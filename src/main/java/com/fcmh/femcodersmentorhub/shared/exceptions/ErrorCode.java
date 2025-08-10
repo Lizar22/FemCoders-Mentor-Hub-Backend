@@ -6,6 +6,7 @@ public enum ErrorCode {
     AUTH_02, // Invalid credentials
     AUTH_03, // Email or username already registered
     AUTH_04, // Invalid token
+    AUTH_05, // Expired token
 
     VALIDATION_01, //Validation error
 
