@@ -51,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new InvalidTokenException("Error extracting user from token: " + exception.getMessage());
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username == null && SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
