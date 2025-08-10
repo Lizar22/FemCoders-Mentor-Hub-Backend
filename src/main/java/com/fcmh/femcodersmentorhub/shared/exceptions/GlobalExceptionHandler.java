@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException exception, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleExpiredTokenException(InvalidTokenException exception, HttpServletRequest request) {
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ExpiredTokenException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidTokenException(ExpiredTokenException exception, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleExpiredTokenException(ExpiredTokenException exception, HttpServletRequest request) {
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
