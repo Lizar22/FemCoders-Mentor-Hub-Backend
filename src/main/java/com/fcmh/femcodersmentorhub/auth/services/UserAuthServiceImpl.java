@@ -10,6 +10,13 @@ import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthMapper;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
+import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +25,15 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final UserAuthRepository userAuthRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserAuthMapper userAuthMapper;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public UserAuthServiceImpl(UserAuthRepository userAuthRepository, BCryptPasswordEncoder passwordEncoder, UserAuthMapper userAuthMapper) {
+    public UserAuthServiceImpl(UserAuthRepository userAuthRepository, BCryptPasswordEncoder passwordEncoder, UserAuthMapper userAuthMapper, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userAuthRepository = userAuthRepository;
         this.passwordEncoder = passwordEncoder;
         this.userAuthMapper = userAuthMapper;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -50,15 +61,24 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        UserAuth user = userAuthRepository.findByEmail(loginRequest.identifier()).orElseThrow(() -> new UserNotFoundException(loginRequest.identifier()));
 
-        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-            throw new InvalidCredentialsException(loginRequest.identifier());
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.identifier(),
+                            loginRequest.password()
+                    )
+            );
+
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            String token = jwtService.generateToken(userDetails);
+
+            return new LoginResponse(token);
+
+        } catch (UsernameNotFoundException exception) {
+            throw new UserNotFoundException("User not found: " + loginRequest.identifier());
+        } catch (BadCredentialsException exception) {
+            throw new InvalidCredentialsException("Invalid credentials for: " + loginRequest.identifier());
         }
-
-        return new LoginResponse(
-                user.getUsername(),
-                user.getEmail()
-        );
     }
 }
