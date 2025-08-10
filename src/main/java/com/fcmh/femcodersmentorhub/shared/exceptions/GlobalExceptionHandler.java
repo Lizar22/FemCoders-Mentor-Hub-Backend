@@ -1,6 +1,7 @@
 package com.fcmh.femcodersmentorhub.shared.exceptions;
 
 import com.fcmh.femcodersmentorhub.auth.exceptions.InvalidCredentialsException;
+import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException exception, HttpServletRequest request) {
         ErrorResponse error = buildErrorResponse(
-                ErrorCode.AUTH_01,
+                exception.getErrorCode(),
                 exception.getMessage(),
                 HttpStatus.NOT_FOUND,
                 request.getRequestURI()
@@ -30,12 +31,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException exception, HttpServletRequest request) {
         ErrorResponse error = buildErrorResponse(
-                ErrorCode.AUTH_02,
+                exception.getErrorCode(),
                 exception.getMessage(),
                 HttpStatus.UNAUTHORIZED,
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.CONFLICT,
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
