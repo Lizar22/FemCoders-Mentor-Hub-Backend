@@ -1,6 +1,7 @@
 package com.fcmh.femcodersmentorhub.auth.services;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
+import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthMapper;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
@@ -22,7 +23,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public UserAuthResponse findUserById(Long id) {
-        UserAuth user = userAuthRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        UserAuth user = userAuthRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
         return UserAuthMapper.entityToDto(user);
     }
 
