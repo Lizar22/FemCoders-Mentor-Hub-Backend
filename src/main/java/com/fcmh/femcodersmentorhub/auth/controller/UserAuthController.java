@@ -7,6 +7,7 @@ import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
+import com.fcmh.femcodersmentorhub.shared.responses.SuccessResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,20 +33,20 @@ public class UserAuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserAuthResponse> registerUser(@RequestBody @Valid UserAuthRequest userAuthRequest) {
+    public ResponseEntity<SuccessResponse<UserAuthResponse>> registerUser(@RequestBody @Valid UserAuthRequest userAuthRequest) {
+
         UserAuthResponse userAuthResponse = userAuthServiceImpl.addUser(userAuthRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userAuthResponse);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SuccessResponse.of("User registered successfully", userAuthResponse)
+        );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.identifier(), request.password()));
+    public ResponseEntity<SuccessResponse<LoginResponse>> login(@RequestBody @Valid LoginRequest loginRequest) {
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        String token = jwtService.generateToken(userDetails);
-
-        LoginResponse loginResponse = new LoginResponse(token, "Login successful");
-        return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+        LoginResponse loginResponse = userAuthServiceImpl.login(loginRequest);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.of("Login successful", loginResponse)
+        );
     }
 }
