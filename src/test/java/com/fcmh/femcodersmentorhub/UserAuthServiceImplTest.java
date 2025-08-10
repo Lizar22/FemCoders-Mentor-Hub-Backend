@@ -8,11 +8,19 @@ import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.security.Role;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserAuthServiceImplTest {
@@ -22,9 +30,6 @@ public class UserAuthServiceImplTest {
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
-
-    @Mock
-    private UserAuthMapper userAuthMapper;
 
     @InjectMocks
     private UserAuthServiceImpl userAuthService;
@@ -51,5 +56,23 @@ public class UserAuthServiceImplTest {
         testUserAuthRequest = new UserAuthRequest(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
         testUserAuthResponse = new UserAuthResponse(TEST_USERNAME, TEST_EMAIL, TEST_ROLE);
     }
+
+    @Test
+    @DisplayName("POST /register - should add a new user successfully")
+    void addUser_WhenValidData_ReturnsOkAndCreatedUser() {
+        when(userAuthRepository.existsByEmail(TEST_EMAIL)).thenReturn(false);
+        when(userAuthRepository.existsByUsername(TEST_USERNAME)).thenReturn(false);
+        when(passwordEncoder.encode(TEST_PASSWORD)).thenReturn(ENCODED_PASSWORD);
+        when(userAuthRepository.save(any(UserAuth.class))).thenReturn(testUserAuth);
+
+        UserAuthResponse result = userAuthService.addUser(testUserAuthRequest);
+
+        assertNotNull(result);
+        verify(userAuthRepository).existsByEmail(TEST_EMAIL);
+        verify(userAuthRepository).existsByUsername(TEST_USERNAME);
+        verify(passwordEncoder).encode(TEST_PASSWORD);
+        verify(userAuthRepository).save(any(UserAuth.class));
+    }
+
 
 }
