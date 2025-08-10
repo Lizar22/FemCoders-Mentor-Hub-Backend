@@ -3,6 +3,8 @@ package com.fcmh.femcodersmentorhub.shared.exceptions;
 import com.fcmh.femcodersmentorhub.auth.exceptions.InvalidCredentialsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
+import com.fcmh.femcodersmentorhub.security.exceptions.ExpiredTokenException;
+import com.fcmh.femcodersmentorhub.security.exceptions.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 request.getRequestURI()
         );
+
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
@@ -36,6 +39,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.UNAUTHORIZED,
                 request.getRequestURI()
         );
+
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
@@ -47,7 +51,32 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT,
                 request.getRequestURI()
         );
+
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.UNAUTHORIZED,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(ExpiredTokenException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.UNAUTHORIZED,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -63,6 +92,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 request.getRequestURI()
         );
+
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -74,6 +104,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 request.getRequestURI()
         );
+
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
