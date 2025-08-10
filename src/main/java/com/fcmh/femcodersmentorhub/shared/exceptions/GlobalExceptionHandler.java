@@ -1,5 +1,6 @@
 package com.fcmh.femcodersmentorhub.shared.exceptions;
 
+import com.fcmh.femcodersmentorhub.auth.exceptions.InvalidCredentialsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,17 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                ErrorCode.AUTH_02,
+                exception.getMessage(),
+                HttpStatus.UNAUTHORIZED,
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
