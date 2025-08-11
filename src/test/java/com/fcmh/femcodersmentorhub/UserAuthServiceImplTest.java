@@ -4,6 +4,7 @@ import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthMapper;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.security.Role;
@@ -17,10 +18,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserAuthServiceImplTest {
@@ -72,6 +72,37 @@ public class UserAuthServiceImplTest {
         verify(userAuthRepository).existsByUsername(TEST_USERNAME);
         verify(passwordEncoder).encode(TEST_PASSWORD);
         verify(userAuthRepository).save(any(UserAuth.class));
+    }
+
+    @Test
+    @DisplayName("POST /register - should return an user already exists error 409")
+    void addUser_WhenEmailAlreadyExists_ReturnsUserAlreadyExistsError() {
+        when(userAuthRepository.existsByEmail(TEST_EMAIL)).thenReturn(true);
+
+        UserAlreadyExistsException exception = assertThrows(
+                UserAlreadyExistsException.class,
+                () -> userAuthService.addUser(testUserAuthRequest)
+        );
+
+        assertTrue(exception.getMessage().contains("email"));
+        verify(userAuthRepository).existsByEmail(TEST_EMAIL);
+        verify(userAuthRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("POST /register - should return an user already exists error 409")
+    void addUser_WhenUsernameAlreadyExists_ReturnsUserAlreadyExistsError() {
+        when(userAuthRepository.existsByEmail(TEST_EMAIL)).thenReturn(false);
+        when(userAuthRepository.existsByUsername(TEST_USERNAME)).thenReturn(true);
+
+        UserAlreadyExistsException exception = assertThrows(
+                UserAlreadyExistsException.class,
+                () -> userAuthService.addUser(testUserAuthRequest)
+        );
+
+        assertTrue(exception.getMessage().contains("username"));
+        verify(userAuthRepository).existsByUsername(TEST_USERNAME);
+        verify(userAuthRepository, never()).save(any());
     }
 
 
