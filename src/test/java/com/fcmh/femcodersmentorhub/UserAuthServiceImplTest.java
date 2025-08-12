@@ -1,21 +1,25 @@
 package com.fcmh.femcodersmentorhub;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
-import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthMapper;
+import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginRequest;
+import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginResponse;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
+import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.Role;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,18 +35,28 @@ public class UserAuthServiceImplTest {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtService jwtService;
+
     @InjectMocks
     private UserAuthServiceImpl userAuthService;
 
     private UserAuth testUserAuth;
     private UserAuthRequest testUserAuthRequest;
     private UserAuthResponse testUserAuthResponse;
-    private final Long TEST_USER_ID = 1L;
-    private final String TEST_USERNAME = "Cris Mouta";
-    private final String TEST_EMAIL = "cris.mouta@fcmh.com";
-    private final String TEST_PASSWORD = "Password123.";
-    private final String ENCODED_PASSWORD = "$2a$10$EncodedPasswordHash";
-    private final Role TEST_ROLE = Role.MENTOR;
+    private LoginRequest testLoginRequest;
+    private static final Long TEST_USER_ID = 1L;
+    private static final String TEST_USERNAME = "Cris Mouta";
+    private static final String TEST_EMAIL = "cris.mouta@fcmh.com";
+    private static final String TEST_PASSWORD = "Password123.";
+    private static final String ENCODED_PASSWORD = "$2a$10$EncodedPasswordHash";
+    private static final String TEST_JWT_TOKEN = "jwt.token.example";
+    private static final Role TEST_ROLE = Role.MENTOR;
+    private static final String TEST_IDENTIFIER_EMAIL = "cris.mouta@fcmh.com";
+    private static final String TEST_IDENTIFIER_USERNAME = "Cris Mouta";
 
     @BeforeEach
     void setUp() {
@@ -55,6 +69,7 @@ public class UserAuthServiceImplTest {
 
         testUserAuthRequest = new UserAuthRequest(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
         testUserAuthResponse = new UserAuthResponse(TEST_USERNAME, TEST_EMAIL, TEST_ROLE);
+        testLoginRequest = new LoginRequest(TEST_IDENTIFIER_EMAIL, TEST_PASSWORD);
     }
 
     @Test
@@ -105,5 +120,24 @@ public class UserAuthServiceImplTest {
         verify(userAuthRepository, never()).save(any());
     }
 
+    @ParameterizedTest
+    @DisplayName("POST /login - should login a user successfully")
+    @ValueSource(strings = {TEST_IDENTIFIER_EMAIL, TEST_IDENTIFIER_USERNAME})
+    void login_WhenValidIdentifier_ReturnsToken(String identifier) {
+        Authentication mockAuthentication = mock(Authentication.class);
+        CustomUserDetails mockUserDetails = mock(CustomUserDetails.class);
+        LoginRequest loginRequest = new LoginRequest(identifier, TEST_PASSWORD);
 
+        when(authenticationManager.authenticate(any()))
+                .thenReturn(mockAuthentication);
+        when(mockAuthentication.getPrincipal()).thenReturn(mockUserDetails);
+        when(jwtService.generateToken(mockUserDetails)).thenReturn(TEST_JWT_TOKEN);
+
+        LoginResponse result = userAuthService.login(loginRequest);
+
+        assertNotNull(result);
+        assertEquals(TEST_JWT_TOKEN, result.token());
+        verify(authenticationManager).authenticate(any());
+        verify(jwtService).generateToken(mockUserDetails);
+    }
 }
