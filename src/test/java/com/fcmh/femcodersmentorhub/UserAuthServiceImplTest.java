@@ -11,9 +11,16 @@ import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.Role;
 import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.apache.tomcat.util.http.parser.TE;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,6 +28,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,6 +53,7 @@ public class UserAuthServiceImplTest {
 
     @InjectMocks
     private UserAuthServiceImpl userAuthService;
+    private static Validator validator;
 
     private UserAuth testUserAuth;
     private UserAuthRequest testUserAuthRequest;
@@ -57,6 +68,12 @@ public class UserAuthServiceImplTest {
     private static final Role TEST_ROLE = Role.MENTOR;
     private static final String TEST_IDENTIFIER_EMAIL = "cris.mouta@fcmh.com";
     private static final String TEST_IDENTIFIER_USERNAME = "Cris Mouta";
+
+    @BeforeAll
+    static void setUpValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
     @BeforeEach
     void setUp() {
@@ -118,6 +135,31 @@ public class UserAuthServiceImplTest {
         assertTrue(exception.getMessage().contains("username"));
         verify(userAuthRepository).existsByUsername(TEST_USERNAME);
         verify(userAuthRepository, never()).save(any());
+    }
+
+    static Stream<Arguments> invalidDtos() {
+        return Stream.of(
+                Arguments.of(new UserAuthRequest("", TEST_EMAIL, TEST_PASSWORD, TEST_ROLE),
+                        "Username is required"),
+                Arguments.of(new UserAuthRequest("M",TEST_EMAIL, TEST_PASSWORD, TEST_ROLE ),
+                        "Username must contain between 2 and 50 characters"),
+                Arguments.of(new UserAuthRequest(TEST_USERNAME, "kkk", TEST_PASSWORD, TEST_ROLE),
+                        "Invalid e-mail format"),
+                Arguments.of(new UserAuthRequest(TEST_USERNAME, TEST_EMAIL, "ggg", TEST_ROLE),
+                        "Password must contain a minimum of 12 characters, including a number, one uppercase letter, one lowercase letter and one special character"),
+                Arguments.of(new UserAuthRequest(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, null),
+                        "Role is required. You must choose between MENTOR or MENTEE")
+        );
+    }
+
+    @ParameterizedTest(name = "{index} -> {1}")
+    @MethodSource("invalidDtos")
+    void whenInvalidDto_ReturnsValidationError(UserAuthRequest dto, String expectedMessage) {
+        Set<ConstraintViolation<UserAuthRequest>> violations = validator.validate(dto);
+
+        assertTrue(violations
+                        .stream().anyMatch(violation -> violation.getMessage().contains(expectedMessage)),
+                () -> "Expected violation containing: " + expectedMessage);
     }
 
     @ParameterizedTest
