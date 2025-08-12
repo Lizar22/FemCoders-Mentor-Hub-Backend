@@ -5,7 +5,9 @@ import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginResponse;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.auth.exceptions.InvalidCredentialsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
+import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
@@ -25,7 +27,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Set;
@@ -178,8 +182,38 @@ public class UserAuthServiceImplTest {
 
         assertNotNull(result);
         assertEquals(TEST_JWT_TOKEN, result.token());
+        assertNotNull(result.token(), "Token should not be null");
+        assertFalse(result.token().isBlank(), "Token should not be empty");
         verify(authenticationManager).authenticate(any());
         verify(jwtService).generateToken(mockUserDetails);
+    }
+
+    @Test
+    @DisplayName("POST /login - should return user not found error 404")
+    void login_WhenUserNotFound_ThrowsUserNotFoundException(){
+        LoginRequest loginRequest = new LoginRequest(TEST_IDENTIFIER_USERNAME, TEST_PASSWORD);
+
+        when(authenticationManager.authenticate(any())).thenThrow(new UsernameNotFoundException("User not found"));
+
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class,
+                () -> userAuthService.login(loginRequest));
+
+        assertTrue(exception.getMessage().contains("User not found: " + loginRequest.identifier()));
+        verify(authenticationManager).authenticate(any());
+    }
+
+    @Test
+    @DisplayName("POST /login - should return invalid credentials error 401")
+    void login_WhenInvalidCredentials_ThrowsInvalidCredentialsException(){
+        LoginRequest loginRequest = new LoginRequest(TEST_IDENTIFIER_EMAIL, TEST_PASSWORD);
+
+        when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("Bad credentials"));
+
+        InvalidCredentialsException exception = assertThrows(InvalidCredentialsException.class,
+                () -> userAuthService.login(loginRequest));
+
+        assertTrue(exception.getMessage().contains("Invalid credentials for: " + loginRequest.identifier()));
+        verify(authenticationManager).authenticate(any());
     }
 
     static Stream<Arguments> invalidLoginDtos() {
