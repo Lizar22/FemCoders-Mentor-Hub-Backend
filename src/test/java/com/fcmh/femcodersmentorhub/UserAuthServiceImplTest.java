@@ -15,7 +15,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.apache.tomcat.util.http.parser.TE;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -137,7 +136,7 @@ public class UserAuthServiceImplTest {
         verify(userAuthRepository, never()).save(any());
     }
 
-    static Stream<Arguments> invalidDtos() {
+    static Stream<Arguments> invalidUserAuthDtos() {
         return Stream.of(
                 Arguments.of(new UserAuthRequest("", TEST_EMAIL, TEST_PASSWORD, TEST_ROLE),
                         "Username is required"),
@@ -153,8 +152,8 @@ public class UserAuthServiceImplTest {
     }
 
     @ParameterizedTest(name = "{index} -> {1}")
-    @MethodSource("invalidDtos")
-    void whenInvalidDto_ReturnsValidationError(UserAuthRequest dto, String expectedMessage) {
+    @MethodSource("invalidUserAuthDtos")
+    void whenInvalidUserAuthDto_ReturnsValidationError(UserAuthRequest dto, String expectedMessage) {
         Set<ConstraintViolation<UserAuthRequest>> violations = validator.validate(dto);
 
         assertTrue(violations
@@ -181,5 +180,28 @@ public class UserAuthServiceImplTest {
         assertEquals(TEST_JWT_TOKEN, result.token());
         verify(authenticationManager).authenticate(any());
         verify(jwtService).generateToken(mockUserDetails);
+    }
+
+    static Stream<Arguments> invalidLoginDtos() {
+        return Stream.of(
+                Arguments.of(new LoginRequest("", TEST_PASSWORD),
+                        "Username or e-mail is required"),
+                Arguments.of(new LoginRequest(null, TEST_PASSWORD),
+                        "Username or e-mail is required"),
+                Arguments.of(new LoginRequest(TEST_IDENTIFIER_USERNAME, ""),
+                        "Password is required"),
+                Arguments.of(new LoginRequest(TEST_IDENTIFIER_EMAIL, null),
+                        "Password is required")
+        );
+    }
+
+    @ParameterizedTest(name = "{index} -> {1}")
+    @MethodSource("invalidLoginDtos")
+    void whenInvalidLoginDto_ReturnsValidationError(LoginRequest dto, String expectedMessage) {
+        Set<ConstraintViolation<LoginRequest>> violations = validator.validate(dto);
+
+        assertTrue(violations
+                        .stream().anyMatch(violation -> violation.getMessage().contains(expectedMessage)),
+                () -> "Expected violation containing: " + expectedMessage);
     }
 }

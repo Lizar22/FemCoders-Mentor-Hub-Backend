@@ -3,7 +3,7 @@ package com.fcmh.femcodersmentorhub.auth.dtos.login;
 import jakarta.validation.constraints.NotBlank;
 
 public record LoginRequest(
-        @NotBlank(message = "Username or email is required")
+        @NotBlank(message = "Username or e-mail is required")
         String identifier,
 
         @NotBlank(message = "Password is required")
