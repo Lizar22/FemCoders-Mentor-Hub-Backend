@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserAuthController {
 
     private final UserAuthServiceImpl userAuthServiceImpl;
-
+    
     public UserAuthController(UserAuthServiceImpl userAuthServiceImpl) {
         this.userAuthServiceImpl = userAuthServiceImpl;
     }
