@@ -3,6 +3,7 @@ package com.fcmh.femcodersmentorhub.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -17,10 +18,10 @@ public class ApiTestHelper {
         this.objectMapper = objectMapper;
     }
 
-    public <T> void performRequest(MockHttpServletRequestBuilder requestBuilder, T requestBody, String expectedMessage) throws Exception {
+    public <T> ResultActions performRequest(MockHttpServletRequestBuilder requestBuilder, T requestBody, String expectedMessage) throws Exception {
         String json = objectMapper.writeValueAsString(requestBody);
 
-        mockMvc.perform(requestBuilder
+        return mockMvc.perform(requestBuilder
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
