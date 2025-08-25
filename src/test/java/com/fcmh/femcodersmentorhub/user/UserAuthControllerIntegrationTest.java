@@ -88,6 +88,26 @@ public class UserAuthControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("POST /register - should return 409 when email already exists")
+    void addUser_WhenEmailExists_ReturnsConflict() throws Exception {
+        userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
+
+        UserAuthRequest duplicateEmailUser = new UserAuthRequest(
+                "Different User",
+                TEST_EMAIL,
+                TEST_PASSWORD,
+                TEST_ROLE
+        );
+
+        apiHelper.performErrorRequest(post(REGISTER_URL),
+                duplicateEmailUser,
+                "AUTH_03",
+                409,
+                "The email is already registered"
+        );
+    }
+
+    @Test
     @DisplayName("POST /login - should login successfully with email")
     void login_WhenValidEmailAndPassword_ReturnsToken() throws Exception {
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
