@@ -97,7 +97,7 @@ public class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Is Token Valid - should return true for valid token and matching user")
+    @DisplayName("Is Valid Token - should return true for valid token and matching user")
     void isValidToken_WhenValidTokenAndMatchingUser_ReturnsTrue() {
         String token = generateTestToken();
 
@@ -107,7 +107,7 @@ public class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Is Token Valid - should return true for valid token and matching user")
+    @DisplayName("Is Valid Token - should return false for valid token and unmatching user")
     void isValidToken_WhenValidTokenButDifferentUser_ReturnsFalse() {
         String token = generateTestToken();
         CustomUserDetails differentUser = mock(CustomUserDetails.class);
@@ -120,7 +120,7 @@ public class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Is Token Valid - should return false for invalid token")
+    @DisplayName("Is Valid Token - should return false for invalid token")
     void isValidToken_WhenInvalidToken_ReturnsFalse() {
         String invalidToken = "lololo";
 
@@ -130,7 +130,7 @@ public class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Is Token Valid - should return false for expired token")
+    @DisplayName("Is Valid Token - should return false for expired token")
     void isValidToken_WhenExpiredToken_ReturnsFalse() throws InterruptedException {
         ReflectionTestUtils.setField(jwtService, "jwtExpiration", 1L);
         String token = generateTestToken();
@@ -143,7 +143,7 @@ public class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Is Token Valid - should return false for null token")
+    @DisplayName("Is Valid Token - should return false for null token")
     void isValidToken_WhenNullToken_ReturnsFalse() {
         boolean isValid = jwtService.isValidToken(null, testUserDetails);
 
@@ -151,7 +151,7 @@ public class JwtServiceTest {
     }
 
     @Test
-    @DisplayName("Is Token Valid - should return false for empty token")
+    @DisplayName("Is Valid Token - should return false for empty token")
     void isValidToken_WhenEmptyToken_ReturnsFalse() {
         boolean isValid = jwtService.isValidToken("", testUserDetails);
 
