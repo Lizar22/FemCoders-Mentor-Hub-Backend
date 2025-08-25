@@ -174,6 +174,72 @@ public class UserAuthControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.token").isString())
                 .andExpect(jsonPath("$.data.token").value(notNullValue()));
+    }
 
+    @Test
+    @DisplayName("POST /login - should login successfully with username")
+    void login_WhenValidUsernameAndPassword_ReturnsToken() throws Exception {
+        userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
+
+        LoginRequest loginRequest = new LoginRequest(TEST_USERNAME, TEST_PASSWORD);
+
+        apiHelper.performRequest(post(LOGIN_URL), loginRequest, "Login successful")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.token").isString())
+                .andExpect(jsonPath("$.data.token").value(notNullValue()));
+    }
+
+    @Test
+    @DisplayName("POST /login - should return 401 for nonexistent user")
+    void login_WhenUserNotFound_ReturnsUnauthorized() throws Exception {
+        LoginRequest loginRequest = new LoginRequest("Nonexistent@fcmh.com", TEST_PASSWORD);
+
+        apiHelper.performErrorRequest(post(LOGIN_URL),
+                loginRequest,
+                "AUTH_02",
+                401,
+                "Invalid credentials"
+        );
+    }
+
+    @Test
+    @DisplayName("POST /login - should return 401 for wrong password")
+    void login_WhenPasswordIsIncorrect_ReturnsUnauthorized() throws Exception {
+        userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
+
+        LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, "WrongPassword123.");
+
+        apiHelper.performErrorRequest(post(LOGIN_URL),
+                loginRequest,
+                "AUTH_02",
+                401,
+                "Invalid credentials"
+        );
+    }
+
+    @Test
+    @DisplayName("POST /login - should return 400 for empty identifier")
+    void login_WhenEmptyIdentifier_ReturnsBadRequest() throws Exception {
+        LoginRequest loginRequest = new LoginRequest("", TEST_PASSWORD);
+
+        apiHelper.performErrorRequest(post(LOGIN_URL),
+                loginRequest,
+                "VALIDATION_01",
+                400,
+                "Username or e-mail is required"
+        );
+    }
+
+    @Test
+    @DisplayName("POST /login - should return 400 for empty password")
+    void login_WhenEmptyPassword_ReturnsBadRequest() throws Exception {
+        LoginRequest loginRequest = new LoginRequest(TEST_USERNAME, "");
+
+        apiHelper.performErrorRequest(post(LOGIN_URL),
+                loginRequest,
+                "VALIDATION_01",
+                400,
+                "Password is required"
+        );
     }
 }
