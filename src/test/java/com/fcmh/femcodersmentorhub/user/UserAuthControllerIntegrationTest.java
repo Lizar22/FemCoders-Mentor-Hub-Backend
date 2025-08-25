@@ -108,6 +108,62 @@ public class UserAuthControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("POST /register - should return 409 when username already exists")
+    void addUser_WhenUsernameExists_ReturnsConflict() throws Exception {
+        userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
+
+        UserAuthRequest duplicateUsernameUser = new UserAuthRequest(
+                TEST_USERNAME,
+                "different.email@fcmh.com",
+                TEST_PASSWORD,
+                TEST_ROLE
+        );
+
+        apiHelper.performErrorRequest(post(REGISTER_URL),
+                duplicateUsernameUser,
+                "AUTH_03",
+                409,
+                "The username is already registered"
+        );
+    }
+
+    @Test
+    @DisplayName("POST /register - should return 400 for invalid email")
+    void addUser_WhenInvalidEmail_ReturnsBadRequest() throws Exception {
+        UserAuthRequest invalidEmailUser = new UserAuthRequest(
+                TEST_USERNAME,
+                "invalid email",
+                TEST_PASSWORD,
+                TEST_ROLE
+        );
+
+        apiHelper.performErrorRequest(post(REGISTER_URL),
+                invalidEmailUser,
+                "VALIDATION_01",
+                400,
+                "Invalid e-mail format"
+        );
+    }
+
+    @Test
+    @DisplayName("POST /register - should return 400 for weak password")
+    void addUser_WhenWeakPassword_ReturnsBadRequest() throws Exception {
+        UserAuthRequest weakPasswordUser = new UserAuthRequest(
+                TEST_USERNAME,
+                TEST_EMAIL,
+                "weak-password",
+                TEST_ROLE
+        );
+
+        apiHelper.performErrorRequest(post(REGISTER_URL),
+                weakPasswordUser,
+                "VALIDATION_01",
+                400,
+                "Password must contain a minimum of 12 characters, including a number, one uppercase letter, one lowercase letter and one special character"
+        );
+    }
+
+    @Test
     @DisplayName("POST /login - should login successfully with email")
     void login_WhenValidEmailAndPassword_ReturnsToken() throws Exception {
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
