@@ -166,7 +166,7 @@ public class UserAuthServiceImplTest {
                 () -> "Expected violation containing: " + expectedMessage);
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Login with identifier={0}")
     @DisplayName("POST /login - should login a user successfully")
     @ValueSource(strings = {TEST_IDENTIFIER_EMAIL, TEST_IDENTIFIER_USERNAME})
     void login_WhenValidIdentifier_ReturnsToken(String identifier) {
