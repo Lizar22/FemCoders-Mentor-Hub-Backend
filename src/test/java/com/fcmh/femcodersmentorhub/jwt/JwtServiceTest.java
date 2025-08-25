@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub;
+package com.fcmh.femcodersmentorhub.jwt;
 
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.Role;
