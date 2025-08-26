@@ -8,6 +8,8 @@ import com.fcmh.femcodersmentorhub.mentors.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorMapper;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorRequest;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorResponse;
+import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileAlreadyExistsException;
+import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,7 @@ public class MentorServiceImpl implements MentorService {
         UserAuth user = getAuthenticatedUser(authentication);
 
         if (mentorRepository.existsByUser(user)) {
-            throw new MentorProfileAlreadyExists("A mentor profile already exists for this user");
+            throw new MentorProfileAlreadyExistsException("A mentor profile already exists for this user");
         }
         MentorProfile newMentor = MentorMapper.dtoToEntity(mentorRequest);
         MentorProfile savedMentor = mentorRepository.save(newMentor);

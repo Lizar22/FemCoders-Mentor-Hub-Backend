@@ -3,6 +3,8 @@ package com.fcmh.femcodersmentorhub.shared.exceptions;
 import com.fcmh.femcodersmentorhub.auth.exceptions.InvalidCredentialsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
+import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileAlreadyExistsException;
+import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
 import com.fcmh.femcodersmentorhub.security.exceptions.ExpiredTokenException;
 import com.fcmh.femcodersmentorhub.security.exceptions.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,6 +79,30 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MentorProfileNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleMentorProfileNotFoundException(MentorProfileNotFoundException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MentorProfileAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleMentorProfileAlreadyExistsException(MentorProfileAlreadyExistsException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.CONFLICT,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
