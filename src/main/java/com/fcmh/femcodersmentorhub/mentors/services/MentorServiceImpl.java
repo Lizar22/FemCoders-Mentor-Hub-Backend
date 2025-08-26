@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MentorServiceImpl implements MentorService {
     @Override
-    public MentorProfile findAllMentors() {
+    public MentorProfile getAllMentors() {
         return null;
     }
 
     @Override
-    public MentorProfile findMentorById(Long id) {
+    public MentorProfile getMentorById(Long id) {
         return null;
     }
 }
