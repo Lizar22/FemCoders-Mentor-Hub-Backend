@@ -3,9 +3,11 @@ package com.fcmh.femcodersmentorhub.mentors;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorRequest;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorResponse;
 import com.fcmh.femcodersmentorhub.mentors.services.MentorServiceImpl;
+import com.fcmh.femcodersmentorhub.shared.responses.SuccessResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,32 +23,40 @@ public class MentorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MentorResponse>> getAllMentors() {
+    public ResponseEntity<SuccessResponse<List<MentorResponse>>> getAllMentors() {
         List<MentorResponse> mentors = mentorService.getAllMentors();
-        return new ResponseEntity<>(mentors, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.of("Mentors list retrieved successfully", mentors));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MentorResponse> getMentorProfileById(@PathVariable Long id) {
+    public ResponseEntity<SuccessResponse<MentorResponse>> getMentorProfileById(@PathVariable Long id) {
         MentorResponse mentorProfile = mentorService.getMentorProfileById(id);
-        return new ResponseEntity<>(mentorProfile, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.of("Mentor profile retrieved successfully", mentorProfile));
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<MentorResponse> addMentorProfile(@Valid @RequestBody MentorRequest mentorRequest) {
+    @PostMapping
+    @PreAuthorize("hasRole('MENTOR')")
+    public ResponseEntity<SuccessResponse<MentorResponse>> addMentorProfile(@Valid @RequestBody MentorRequest mentorRequest) {
         MentorResponse newMentorProfile = mentorService.addMentorProfile(mentorRequest);
-        return new ResponseEntity<>(newMentorProfile, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SuccessResponse.of("Mentor profile created successfully", newMentorProfile));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MentorResponse> updateMentorProfile(@PathVariable Long id, @Valid @RequestBody MentorRequest mentorRequest) {
+    @PutMapping("/me")
+    @PreAuthorize("hasRole('MENTOR')")
+    public ResponseEntity<SuccessResponse<MentorResponse>> updateMentorProfile(@PathVariable Long id, @Valid @RequestBody MentorRequest mentorRequest) {
         MentorResponse updatedMentorProfile = mentorService.updateMentorProfile(id, mentorRequest);
-        return new ResponseEntity<>(updatedMentorProfile, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.of("Mentor profile updated successfully", updatedMentorProfile));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMentorProfile(@PathVariable Long id) {
+    @DeleteMapping("/me")
+    @PreAuthorize("hasRole('MENTOR')")
+    public ResponseEntity<SuccessResponse<Void>> deleteMentorProfile(@PathVariable Long id) {
         mentorService.deleteMentorProfile(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(SuccessResponse.of("Mentor profile deleted successfully"));
     }
 }
