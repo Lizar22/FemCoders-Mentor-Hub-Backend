@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,24 +39,24 @@ public class MentorController {
 
     @PostMapping
     @PreAuthorize("hasRole('MENTOR')")
-    public ResponseEntity<SuccessResponse<MentorResponse>> addMentorProfile(@Valid @RequestBody MentorRequest mentorRequest) {
-        MentorResponse newMentorProfile = mentorService.addMentorProfile(mentorRequest);
+    public ResponseEntity<SuccessResponse<MentorResponse>> addMentorProfile(@Valid @RequestBody MentorRequest mentorRequest, Authentication authentication) {
+        MentorResponse newMentorProfile = mentorService.addMentorProfile(mentorRequest, authentication);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.of("Mentor profile created successfully", newMentorProfile));
     }
 
     @PutMapping("/me")
     @PreAuthorize("hasRole('MENTOR')")
-    public ResponseEntity<SuccessResponse<MentorResponse>> updateMentorProfile(@PathVariable Long id, @Valid @RequestBody MentorRequest mentorRequest) {
-        MentorResponse updatedMentorProfile = mentorService.updateMentorProfile(id, mentorRequest);
+    public ResponseEntity<SuccessResponse<MentorResponse>> updateMentorProfile(@Valid @RequestBody MentorRequest mentorRequest, Authentication authentication) {
+        MentorResponse updatedMentorProfile = mentorService.updateMentorProfile(mentorRequest, authentication);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.of("Mentor profile updated successfully", updatedMentorProfile));
     }
 
     @DeleteMapping("/me")
     @PreAuthorize("hasRole('MENTOR')")
-    public ResponseEntity<SuccessResponse<Void>> deleteMentorProfile(@PathVariable Long id) {
-        mentorService.deleteMentorProfile(id);
+    public ResponseEntity<SuccessResponse<Void>> deleteMentorProfile(Authentication authentication) {
+        mentorService.deleteMentorProfile(authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(SuccessResponse.of("Mentor profile deleted successfully"));
     }
