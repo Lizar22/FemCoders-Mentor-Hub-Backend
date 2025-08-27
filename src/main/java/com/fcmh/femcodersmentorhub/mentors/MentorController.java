@@ -57,7 +57,7 @@ public class MentorController {
     @PreAuthorize("hasRole('MENTOR')")
     public ResponseEntity<SuccessResponse<Void>> deleteMentorProfile(Authentication authentication) {
         mentorService.deleteMentorProfile(authentication);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.of("Mentor profile deleted successfully"));
     }
 }
