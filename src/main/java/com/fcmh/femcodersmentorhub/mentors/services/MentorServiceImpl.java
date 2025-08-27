@@ -48,6 +48,7 @@ public class MentorServiceImpl implements MentorService {
             throw new MentorProfileAlreadyExistsException("A mentor profile already exists for this user");
         }
         MentorProfile newMentor = MentorMapper.dtoToEntity(mentorRequest);
+        newMentor.setUser(user);
         MentorProfile savedMentor = mentorRepository.save(newMentor);
         return MentorMapper.entityToDto(savedMentor);
     }
