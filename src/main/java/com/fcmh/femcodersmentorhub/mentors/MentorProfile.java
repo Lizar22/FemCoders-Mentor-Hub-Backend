@@ -29,7 +29,7 @@ public class MentorProfile {
     private List<String> technologies;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "mentor_level", nullable = false)
     private Level level;
 
     @Column(length = 1000)
