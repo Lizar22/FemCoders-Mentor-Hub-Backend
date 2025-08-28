@@ -12,6 +12,9 @@ public interface MentorRepository extends JpaRepository <MentorProfile, Long> {
     boolean existsByUser(UserAuth user);
     Optional<MentorProfile> findByUser(UserAuth user);
 
-    @Query("SELECT m FROM MentorProfile m WHERE (:level IS NULL OR m.level = :level)")
-    List<MentorProfile> findByLevel(@Param("level") Level level);
+    @Query("SELECT DISTINCT m FROM MentorProfile m JOIN m.technologies t WHERE " +
+            "(:technologies IS NULL OR t IN :technologies) AND " +
+            "(:level IS NULL OR m.level = :level)")
+    List<MentorProfile> findByFilters(@Param("technologies") List<String> technologies,
+                                      @Param("level") Level level);
 }

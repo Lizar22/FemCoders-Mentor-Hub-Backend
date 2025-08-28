@@ -28,18 +28,12 @@ public class MentorServiceImpl implements MentorService {
     }
 
     @Override
-    public List<MentorResponse> getAllMentors(Level level) {
-
-        if (level != null) {
-            return mentorRepository.findByLevel(level).stream()
-                    .map(MentorMapper::entityToDto)
-                    .toList();
-        }
-        return mentorRepository.findAll().stream()
+    public List<MentorResponse> getAllMentors(List<String> technologies, Level level) {
+        return mentorRepository.findByFilters(technologies, level)
+                .stream()
                 .map(MentorMapper::entityToDto)
                 .toList();
     }
-
 
     @Override
     public MentorResponse getMentorProfileById(Long id) {
