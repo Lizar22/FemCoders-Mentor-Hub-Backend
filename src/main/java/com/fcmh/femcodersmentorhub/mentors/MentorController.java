@@ -24,8 +24,10 @@ public class MentorController {
     }
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<MentorResponse>>> getAllMentors() {
-        List<MentorResponse> mentors = mentorService.getAllMentors();
+    public ResponseEntity<SuccessResponse<List<MentorResponse>>> getAllMentors(
+            @RequestParam(required = false) Level level) {
+
+        List<MentorResponse> mentors = mentorService.getAllMentors(level);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.of("Mentors list retrieved successfully", mentors));
     }
