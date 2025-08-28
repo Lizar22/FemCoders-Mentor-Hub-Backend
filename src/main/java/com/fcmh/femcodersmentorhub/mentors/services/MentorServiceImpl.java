@@ -3,6 +3,7 @@ package com.fcmh.femcodersmentorhub.mentors.services;
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
+import com.fcmh.femcodersmentorhub.mentors.Level;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
 import com.fcmh.femcodersmentorhub.mentors.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorMapper;
@@ -27,15 +28,16 @@ public class MentorServiceImpl implements MentorService {
     }
 
     @Override
-    public List<MentorResponse> getAllMentors() {
-        List<MentorProfile> mentors = mentorRepository.findAll();
-        return mentors.stream().map(MentorMapper::entityToDto).toList();
+    public List<MentorResponse> getAllMentors(List<String> technologies, List<Level> levels) {
+        return mentorRepository.findByFilters(technologies, levels)
+                .stream()
+                .map(MentorMapper::entityToDto)
+                .toList();
     }
 
     @Override
     public MentorResponse getMentorProfileById(Long id) {
         MentorProfile mentor = mentorRepository.findById(id)
-
                 .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
         return MentorMapper.entityToDto(mentor);
     }
