@@ -14,7 +14,7 @@ public interface MentorRepository extends JpaRepository <MentorProfile, Long> {
 
     @Query("SELECT DISTINCT m FROM MentorProfile m JOIN m.technologies t WHERE " +
             "(:technologies IS NULL OR t IN :technologies) AND " +
-            "(:level IS NULL OR m.level = :level)")
+            "(:levels IS NULL OR m.level IN :levels)")
     List<MentorProfile> findByFilters(@Param("technologies") List<String> technologies,
-                                      @Param("level") Level level);
+                                      @Param("levels") List<Level> levels);
 }

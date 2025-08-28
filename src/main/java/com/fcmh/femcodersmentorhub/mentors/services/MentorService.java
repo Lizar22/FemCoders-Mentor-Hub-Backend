@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface MentorService {
-    List<MentorResponse> getAllMentors(List<String> technologies, Level level);
+    List<MentorResponse> getAllMentors(List<String> technologies, List<Level> levels);
     MentorResponse getMentorProfileById(Long id);
     MentorResponse addMentorProfile(MentorRequest mentorRequest, Authentication authentication);
     MentorResponse updateMentorProfile(MentorRequest mentorRequest, Authentication authentication);
