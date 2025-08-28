@@ -1,14 +1,14 @@
 INSERT INTO users (id, username, email, password, role) VALUES
-(1, 'Cris', 'cris.mouta@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTOR'),
-(2, 'Ana', 'ana.lopez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTOR'),
-(3, 'Lucía', 'lucia.martinez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTOR'),
-(4, 'Marta', 'marta.perez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTOR'),
-(5, 'Elena', 'elena.garcia@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTOR'),
-(6, 'Sofia', 'sofia.gomez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTEE'),
-(7, 'Laura', 'laura.rodriguez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTEE'),
-(8, 'Paula', 'paula.martin@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTEE'),
-(9, 'Carla', 'carla.lopez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTEE'),
-(10, 'Irene', 'irene.sanchez@test.com', '$2a$10$Vb8e9uHqz5H1h6JX5z6c1eX3N1gQ9t5u8Z3eZ5Vn5Z1p1lFqZ1e9u', 'MENTEE');
+(1, 'Cris', 'cris.mouta@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTOR'),
+(2, 'Ana', 'ana.lopez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTOR'),
+(3, 'Lucía', 'lucia.martinez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTOR'),
+(4, 'Marta', 'marta.perez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTOR'),
+(5, 'Elena', 'elena.garcia@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTOR'),
+(6, 'Sofia', 'sofia.gomez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTEE'),
+(7, 'Laura', 'laura.rodriguez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTEE'),
+(8, 'Paula', 'paula.martin@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTEE'),
+(9, 'Carla', 'carla.lopez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTEE'),
+(10, 'Irene', 'irene.sanchez@test.com', '$2a$12$78Gr4VVIp8QUeFoJOekOpezke7773Btetcf944r7tNXOAj.URoDDi', 'MENTEE');
 
 INSERT INTO mentor_profiles (id, full_name, mentor_level, bio, user_id) VALUES
 (1, 'Cris Mouta', 'SENIOR', 'Full-stack developer with 10 years of experience and a passion for teaching', 1),
