@@ -11,6 +11,9 @@ import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMapper;
 import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMenteeRequest;
 import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMentorUpdatedResponse;
 import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestResponse;
+import com.fcmh.femcodersmentorhub.requests.exceptions.InvalidMentoringRequestException;
+import com.fcmh.femcodersmentorhub.requests.exceptions.MentoringRequestNotFoundException;
+import com.fcmh.femcodersmentorhub.requests.exceptions.UnauthorizedMentoringRequestException;
 import com.fcmh.femcodersmentorhub.requests.repository.MentoringRequestRepository;
 import com.fcmh.femcodersmentorhub.security.Role;
 import jakarta.transaction.Transactional;
@@ -81,7 +84,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
 
         MentorProfile mentorProfile = mentorRepository.findByUser(user).orElseThrow(() -> new MentorProfileNotFoundException("Mentor profile not found"));
 
-        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + "not found");
+        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + "not found"));
 
         if (!mentoringRequest.getMentorProfile().equals(mentorProfile)) {
             throw new UnauthorizedMentoringRequestException("You do not have permission to respond to this request");
