@@ -6,8 +6,14 @@ import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
 import com.fcmh.femcodersmentorhub.mentors.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
 import com.fcmh.femcodersmentorhub.requests.MentoringRequest;
+import com.fcmh.femcodersmentorhub.requests.RequestStatus;
+import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMapper;
+import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMenteeRequest;
+import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMentorUpdatedResponse;
+import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestResponse;
 import com.fcmh.femcodersmentorhub.requests.repository.MentoringRequestRepository;
 import com.fcmh.femcodersmentorhub.security.Role;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MentoringRequestServiceImpl implements MentoringRequestService{
     private final MentoringRequestRepository mentoringRequestRepository;
@@ -23,7 +30,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
     private final MentorRepository mentorRepository;
 
     @Override
-    public List<MentoringRequest> getMyMentoringRequests(Authentication authentication) {
+    public List<MentoringRequestResponse> getMyMentoringRequests(Authentication authentication) {
         UserAuth user = getAuthenticatedUser(authentication);
 
         if (user.getRole() == Role.MENTEE) {
@@ -39,8 +46,57 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
     }
 
     @Override
-    public MentoringRequest addMentoringRequest(MentoringRequest mentoringRequest, Authentication authentication) {
-        return null;
+    public MentoringRequestResponse addMentoringRequest(MentoringRequestMenteeRequest request, Authentication authentication) {
+        UserAuth mentee = getAuthenticatedUser(authentication);
+
+        if (mentee.getRole() != Role.MENTEE) {
+            throw new InvalidMentoringRequestException("Invalid credentials");
+        }
+
+        MentorProfile mentorProfile = mentorRepository.findById(request.mentorProfileId()).orElseThrow(() -> new MentorProfileNotFoundException("Mentor profile not found"));
+
+        boolean existsPendingRequest = mentoringRequestRepository.existsByMenteeAndMentorProfileAndStatus(
+                mentee,
+                mentorProfile,
+                RequestStatus.PENDING
+        );
+
+        if (existsPendingRequest) {
+            throw  new InvalidMentoringRequestException("You already have a pending request with this mentor");
+        }
+
+        MentoringRequest newMentoringRequest = MentoringRequestMapper.dtoToEntity(request, mentee, mentorProfile);
+
+        MentoringRequest savedRequest = mentoringRequestRepository.save(newMentoringRequest);
+        return MentoringRequestMapper.entityToDto(savedRequest);
+    }
+
+    @Override
+    public MentoringRequestResponse respondToRequest(Long id, MentoringRequestMentorUpdatedResponse mentorUpdatedResponse, Authentication authentication) {
+        UserAuth user = getAuthenticatedUser(authentication);
+
+        if (user.getRole() != Role.MENTOR) {
+            throw new UnauthorizedMentoringRequestException("Only mentors can respond to requests");
+        }
+
+        MentorProfile mentorProfile = mentorRepository.findByUser(user).orElseThrow(() -> new MentorProfileNotFoundException("Mentor profile not found"));
+
+        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + "not found");
+
+        if (!mentoringRequest.getMentorProfile().equals(mentorProfile)) {
+            throw new UnauthorizedMentoringRequestException("You do not have permission to respond to this request");
+        }
+
+        if (mentoringRequest.getStatus() != RequestStatus.PENDING) {
+            throw new InvalidMentoringRequestException("This request has already been answered");
+        }
+
+        mentoringRequest.setStatus(mentorUpdatedResponse.status());
+        mentoringRequest.setResponseMessage(mentorUpdatedResponse.responseMessage());
+        mentoringRequest.setMeetingLink(mentorUpdatedResponse.meetingLink());
+
+        MentoringRequest updatedRequest = mentoringRequestRepository.save(mentoringRequest);
+        return MentoringRequestMapper.entityToDto(updatedRequest);
     }
 
     private UserAuth getAuthenticatedUser(Authentication authentication) {

@@ -6,7 +6,7 @@ import com.fcmh.femcodersmentorhub.requests.MentoringRequest;
 import com.fcmh.femcodersmentorhub.requests.RequestStatus;
 
 public class MentoringRequestMapper {
-    public MentoringRequest dtoToEntity(MentoringRequestMenteeRequest request, UserAuth mentee, MentorProfile mentorProfile) {
+    public static MentoringRequest dtoToEntity(MentoringRequestMenteeRequest request, UserAuth mentee, MentorProfile mentorProfile) {
         return MentoringRequest.builder()
                 .topic(request.topic())
                 .scheduledAt(request.scheduledAt())
@@ -19,7 +19,7 @@ public class MentoringRequestMapper {
                 .build();
     }
 
-    public MentoringRequestResponse entityToDto(MentoringRequest request) {
+    public static MentoringRequestResponse entityToDto(MentoringRequest request) {
         return new MentoringRequestResponse(
                 request.getId(),
                 request.getTopic(),
