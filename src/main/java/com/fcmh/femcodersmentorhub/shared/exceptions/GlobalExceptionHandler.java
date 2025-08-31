@@ -5,6 +5,9 @@ import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
+import com.fcmh.femcodersmentorhub.requests.exceptions.InvalidMentoringRequestException;
+import com.fcmh.femcodersmentorhub.requests.exceptions.MentoringRequestNotFoundException;
+import com.fcmh.femcodersmentorhub.requests.exceptions.UnauthorizedMentoringRequestException;
 import com.fcmh.femcodersmentorhub.security.exceptions.ExpiredTokenException;
 import com.fcmh.femcodersmentorhub.security.exceptions.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -103,6 +106,42 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidMentoringRequestException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidMentoringRequestException(InvalidMentoringRequestException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MentoringRequestNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleMentoringRequestNotFoundException (MentoringRequestNotFoundException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnauthorizedMentoringRequestException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedMentoringRequestException (UnauthorizedMentoringRequestException exception, HttpServletRequest request) {
+        ErrorResponse error = buildErrorResponse(
+                exception.getErrorCode(),
+                exception.getMessage(),
+                HttpStatus.FORBIDDEN,
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
