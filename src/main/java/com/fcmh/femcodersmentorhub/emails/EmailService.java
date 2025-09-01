@@ -72,7 +72,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF8_ENCODING);
 
             helper.setTo(emailData.getTo());
-            helper.setSubject("New Mentorship Request - FemCoders MentorHub");
+            helper.setSubject(emailData.getSubject());
             helper.setFrom("noreply@femcodersmentorhub.com");
 
             Context context = new Context();

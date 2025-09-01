@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MentoringRequestServiceImpl implements MentoringRequestService{
 
-    private static final String DATE_TIME_PATTERN = "dd/MM/yyyy 'a las' HH:mm";
+    private static final String DATE_TIME_PATTERN = "dd/MM/yyyy 'at' HH:mm";
 
     private final MentoringRequestRepository mentoringRequestRepository;
     private final UserAuthRepository userAuthRepository;
