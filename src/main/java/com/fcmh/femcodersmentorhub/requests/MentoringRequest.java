@@ -38,7 +38,7 @@ public class MentoringRequest {
     @Column(name = "response_message", length = 1000)
     private String responseMessage;
 
-    @Column(name = "meeting_link", nullable = false)
+    @Column(name = "meeting_link")
     private String meetingLink;
 
     @ManyToOne(fetch = FetchType.LAZY)

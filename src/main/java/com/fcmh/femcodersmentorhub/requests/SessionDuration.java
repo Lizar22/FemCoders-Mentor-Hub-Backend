@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum SessionDuration {
-    SHORT(30),
-    LONG(60);
+    SHORT(45),
+    LONG(90);
 
     private final int minutes;
 }
