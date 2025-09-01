@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/mentors/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/mentors").hasRole("MENTOR")
                         .requestMatchers("/api/mentors/me").hasRole("MENTOR")
+                        //.requestMatchers("/test/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
