@@ -2,6 +2,7 @@ package com.fcmh.femcodersmentorhub.requests.services;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
+import com.fcmh.femcodersmentorhub.emails.EmailService;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
 import com.fcmh.femcodersmentorhub.mentors.repository.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
@@ -22,15 +23,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MentoringRequestServiceImpl implements MentoringRequestService{
+
+    private static final String DATE_TIME_PATTERN = "dd/MM/yyyy 'a las' HH:mm";
+
     private final MentoringRequestRepository mentoringRequestRepository;
     private final UserAuthRepository userAuthRepository;
     private final MentorRepository mentorRepository;
+    private final EmailService emailService;
 
     @Override
     public List<MentoringRequestResponse> getMyMentoringRequests(Authentication authentication) {
@@ -69,8 +76,10 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
         }
 
         MentoringRequest newMentoringRequest = MentoringRequestMapper.dtoToEntity(request, mentee, mentorProfile);
-
         MentoringRequest savedRequest = mentoringRequestRepository.save(newMentoringRequest);
+
+        sendRequestNotificationToMentor(savedRequest);
+
         return MentoringRequestMapper.entityToDto(savedRequest);
     }
 
@@ -99,6 +108,9 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
         mentoringRequest.setMeetingLink(mentorUpdatedResponse.meetingLink());
 
         MentoringRequest updatedRequest = mentoringRequestRepository.save(mentoringRequest);
+
+        sendResponseNotificationToMentee(updatedRequest);
+
         return MentoringRequestMapper.entityToDto(updatedRequest);
     }
 
@@ -106,5 +118,37 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
         String username = authentication.getName();
         return userAuthRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
+
+    private String formatScheduledDate(LocalDateTime scheduledAt) {
+        return scheduledAt.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+    }
+
+    private void sendRequestNotificationToMentor(MentoringRequest request) {
+        try {
+            emailService.sendRequestNotificationToMentor(
+                    request.getMentorProfile().getUser().getEmail(),
+                    request.getMentorProfile().getFullName(),
+                    request.getMentee().getUsername(),
+                    request.getTopic(),
+                    formatScheduledDate(request.getScheduledAt())
+            );
+        } catch (Exception exception) {
+        }
+    }
+
+    private void sendResponseNotificationToMentee(MentoringRequest request) {
+        try {
+            emailService.sendResponseNotificationToMentee(
+                    request.getMentee().getEmail(),
+                    request.getMentee().getUsername(),
+                    request.getMentorProfile().getFullName(),
+                    request.getTopic(),
+                    request.getStatus().toString(),
+                    request.getResponseMessage(),
+                    request.getMeetingLink()
+            );
+        } catch (Exception exception) {
+        }
     }
 }
