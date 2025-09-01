@@ -5,7 +5,7 @@ import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.mentors.Level;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
-import com.fcmh.femcodersmentorhub.mentors.MentorRepository;
+import com.fcmh.femcodersmentorhub.mentors.repository.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorRequest;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorResponse;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileAlreadyExistsException;

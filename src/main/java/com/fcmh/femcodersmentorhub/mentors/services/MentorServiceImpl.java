@@ -5,12 +5,14 @@ import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.mentors.Level;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
-import com.fcmh.femcodersmentorhub.mentors.MentorRepository;
+import com.fcmh.femcodersmentorhub.mentors.repository.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorMapper;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorRequest;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorResponse;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,14 +20,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class MentorServiceImpl implements MentorService {
     private final MentorRepository mentorRepository;
     private final UserAuthRepository userAuthRepository;
-
-    public MentorServiceImpl(MentorRepository mentorRepository, UserAuthRepository userAuthRepository) {
-        this.mentorRepository = mentorRepository;
-        this.userAuthRepository = userAuthRepository;
-    }
 
     @Override
     public List<MentorResponse> getAllMentors(List<String> technologies, List<Level> levels) {

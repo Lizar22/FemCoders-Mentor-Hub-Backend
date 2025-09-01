@@ -11,4 +11,3 @@ public class MentorProfileNotFoundException extends RuntimeException {
         return ErrorCode.MENTOR_01;
     }
 }
-

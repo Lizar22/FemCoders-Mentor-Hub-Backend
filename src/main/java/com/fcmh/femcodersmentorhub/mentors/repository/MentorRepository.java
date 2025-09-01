@@ -1,6 +1,8 @@
-package com.fcmh.femcodersmentorhub.mentors;
+package com.fcmh.femcodersmentorhub.mentors.repository;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
+import com.fcmh.femcodersmentorhub.mentors.Level;
+import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

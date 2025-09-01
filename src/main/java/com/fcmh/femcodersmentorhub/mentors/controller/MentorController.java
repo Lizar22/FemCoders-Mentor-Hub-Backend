@@ -1,10 +1,12 @@
-package com.fcmh.femcodersmentorhub.mentors;
+package com.fcmh.femcodersmentorhub.mentors.controller;
 
+import com.fcmh.femcodersmentorhub.mentors.Level;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorRequest;
 import com.fcmh.femcodersmentorhub.mentors.dtos.MentorResponse;
 import com.fcmh.femcodersmentorhub.mentors.services.MentorServiceImpl;
 import com.fcmh.femcodersmentorhub.shared.responses.SuccessResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,13 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/mentors")
+@RequiredArgsConstructor
 public class MentorController {
 
     private final MentorServiceImpl mentorService;
-
-    public MentorController(MentorServiceImpl mentorService) {
-        this.mentorService = mentorService;
-    }
 
     @GetMapping
     public ResponseEntity<SuccessResponse<List<MentorResponse>>> getAllMentors(
