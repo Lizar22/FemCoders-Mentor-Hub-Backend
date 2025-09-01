@@ -3,7 +3,7 @@ package com.fcmh.femcodersmentorhub.requests.services;
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
-import com.fcmh.femcodersmentorhub.mentors.MentorRepository;
+import com.fcmh.femcodersmentorhub.mentors.repository.MentorRepository;
 import com.fcmh.femcodersmentorhub.mentors.exceptions.MentorProfileNotFoundException;
 import com.fcmh.femcodersmentorhub.requests.MentoringRequest;
 import com.fcmh.femcodersmentorhub.requests.RequestStatus;

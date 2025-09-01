@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.requests;
+package com.fcmh.femcodersmentorhub.requests.controller;
 
 import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMenteeRequest;
 import com.fcmh.femcodersmentorhub.requests.dtos.MentoringRequestMentorUpdatedResponse;
