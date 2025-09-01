@@ -12,6 +12,8 @@ import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,20 +23,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class UserAuthServiceImpl implements UserAuthService {
     private final UserAuthRepository userAuthRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserAuthMapper userAuthMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    public UserAuthServiceImpl(UserAuthRepository userAuthRepository, BCryptPasswordEncoder passwordEncoder, UserAuthMapper userAuthMapper, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.userAuthRepository = userAuthRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userAuthMapper = userAuthMapper;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
 
     @Override
     public UserAuthResponse findUserById(Long id) {

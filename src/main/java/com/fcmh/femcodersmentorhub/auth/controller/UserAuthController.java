@@ -7,6 +7,7 @@ import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
 import com.fcmh.femcodersmentorhub.shared.responses.SuccessResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class UserAuthController {
 
     private final UserAuthServiceImpl userAuthServiceImpl;
-
-    public UserAuthController(UserAuthServiceImpl userAuthServiceImpl) {
-        this.userAuthServiceImpl = userAuthServiceImpl;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse<UserAuthResponse>> registerUser(@RequestBody @Valid UserAuthRequest userAuthRequest) {
