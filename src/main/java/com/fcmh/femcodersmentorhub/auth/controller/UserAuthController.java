@@ -38,6 +38,7 @@ public class UserAuthController {
     public ResponseEntity<SuccessResponse<UserAuthResponse>> registerUser(@RequestBody @Valid UserAuthRequest userAuthRequest) {
 
         UserAuthResponse userAuthResponse = userAuthServiceImpl.addUser(userAuthRequest);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(SuccessResponse.of("User registered successfully", userAuthResponse)
         );
@@ -54,6 +55,7 @@ public class UserAuthController {
     public ResponseEntity<SuccessResponse<LoginResponse>> login(@RequestBody @Valid LoginRequest loginRequest) {
 
         LoginResponse loginResponse = userAuthServiceImpl.login(loginRequest);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse.of("Login successful", loginResponse)
         );
