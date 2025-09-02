@@ -25,7 +25,6 @@ import java.util.List;
 @RequestMapping("/api/mentors")
 @RequiredArgsConstructor
 @Tag(name = "Mentors", description = "Mentor profile management operations")
-@SecurityRequirement(name = "bearerAuth")
 public class MentorController {
 
     private final MentorServiceImpl mentorService;
