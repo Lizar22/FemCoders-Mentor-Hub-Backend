@@ -10,6 +10,7 @@ import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthMapper;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthResponse;
+import com.fcmh.femcodersmentorhub.emails.EmailService;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
 import jakarta.transaction.Transactional;
@@ -28,9 +29,9 @@ import org.springframework.stereotype.Service;
 public class UserAuthServiceImpl implements UserAuthService {
     private final UserAuthRepository userAuthRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final UserAuthMapper userAuthMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     @Override
     public UserAuthResponse findUserById(Long id) {
@@ -49,10 +50,13 @@ public class UserAuthServiceImpl implements UserAuthService {
             throw new UserAlreadyExistsException("The username is already registered: " + userAuthRequest.username());
         }
 
-        UserAuth newUser = userAuthMapper.dtoToEntity(userAuthRequest);
+        UserAuth newUser = UserAuthMapper.dtoToEntity(userAuthRequest);
         newUser.setPassword(passwordEncoder.encode(userAuthRequest.password()));
         UserAuth savedUser = userAuthRepository.save(newUser);
-        return userAuthMapper.entityToDto(savedUser);
+
+        emailService.sendWelcomeNotification(savedUser.getEmail(), savedUser.getUsername());
+
+        return UserAuthMapper.entityToDto(savedUser);
     }
 
     @Override

@@ -29,11 +29,26 @@ public class EmailService {
     private final SpringTemplateEngine templateEngine;
 
     @Async("taskExecutor")
+    public void sendWelcomeNotification(String to, String username) {
+
+       EmailData emailData = EmailData.builder()
+                .to(to)
+                .subject("Welcome to FemCoders Mentor Hub - Let's Start Your Journey!")
+                .templateName("welcome-notification")
+                .build();
+
+       emailData.addVariable("username", username);
+       emailData.addVariable("dashboardUrl", DASHBOARD_URL);
+
+        sendEmail(emailData);
+    }
+
+    @Async("taskExecutor")
     public void sendRequestNotificationToMentor(String to, String mentorName, String menteeName, String topic, String scheduledAt) {
 
         EmailData emailData = EmailData.builder()
                 .to(to)
-                .subject("New Mentorship Request - FemCoders MentorHub")
+                .subject("New Mentorship Request - FemCoders Mentor Hub")
                 .templateName("request-notification")
                 .build();
 
@@ -51,7 +66,7 @@ public class EmailService {
 
         EmailData emailData = EmailData.builder()
                 .to(to)
-                .subject("Update on Your Mentorship Request - FemCoders MentorHub")
+                .subject("Update on Your Mentorship Request - FemCoders Mentor Hub")
                 .templateName("response-notification")
                 .build();
 
@@ -82,7 +97,7 @@ public class EmailService {
             helper.setText(htmlContent, true);
 
             mailSender.send(message);
-            log.info("Request email sent successfully to: {}", emailData.getTo());
+            log.info("Email sent successfully to: {}", emailData.getTo());
 
         } catch (MailException | MessagingException exception) {
             log.error("Failed to send email to {}: {}", emailData.getTo(), exception.getMessage(), exception);
