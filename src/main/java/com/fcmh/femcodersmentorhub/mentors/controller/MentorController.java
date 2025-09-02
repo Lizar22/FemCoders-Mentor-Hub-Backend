@@ -75,7 +75,6 @@ public class MentorController {
             @ApiResponse(responseCode = "409", description = "Mentor profile already exists for this user")
     })
     @SecurityRequirement(name = "bearerAuth")
-    @Parameter(description = "Mentor profile data", required = true)
     public ResponseEntity<SuccessResponse<MentorResponse>> addMentorProfile(
             @Valid @RequestBody MentorRequest mentorRequest, Authentication authentication) {
 
@@ -95,7 +94,6 @@ public class MentorController {
             @ApiResponse(responseCode = "404", description = "Mentor profile not found")
     })
     @SecurityRequirement(name = "bearerAuth")
-    @Parameter(description = "Updated mentor profile data", required = true)
     public ResponseEntity<SuccessResponse<MentorResponse>> updateMentorProfile(
             @Valid @RequestBody MentorRequest mentorRequest, Authentication authentication) {
 
