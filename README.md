@@ -3,7 +3,7 @@
 ![Project Status](https://img.shields.io/badge/status-active-success)
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-green)
-![License](https://img.shields.io/badge/license-Apache-red)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 
 **Femcoders Mentor Hub** is a platform designed to connect **mentors** with **mentees** in the tech field. Its goal is to create an inclusive, safe, and accessible space where women starting their programming careers can find guidance, support, and mentorship.
 
@@ -19,12 +19,12 @@ This project is being built as a **prototype (MVP)** with scalability in mind, r
 - [📌 API Endpoints](#-api-endpoints)
 - [📥 Installation & Setup](#-installation--setup)
 - [🧪 Running Tests](#-running-tests)
-- [🐳 Docker Setup](#-docker-setup)
+- [🐳 Docker Setup](#-docker-setup-)
 - [📧 MailHog Setup](#-mailhog-setup-for-development)
 - [🎯 Project Goal](#-project-goal)
 - [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [Created with 💜 by Lizar22](#created-with-💜-by-lizar22)
+- [📝 License](#-license)
+- [💜 Created with 💜 by Lizar22](#-created-with--by-lizar22-)
 
 
 <br>
@@ -236,13 +236,20 @@ Please open an **issue** or **pull request** to collaborate 😊
 
 <br>
 
-## 📄 License
+## 📝 License
 
-This project is licensed under the **Apache License v2.0**.
+This project is open source and is licensed under the [Apache License 2.0].
+
+Copyright 2025 FemCodersMentorHub.
+
+You are free to use, modify, and distribute this code, as long as you keep this notice and give proper credit to the original author.
+
+The license also covers any patents related to this project; all patent rights remain with the author.
+
 
 <br>
 
-## Created with 💜 by Lizar22 
+## 💜 Created with 💜 by Lizar22 
 
 **FemCoders Mentor Hub** is a respectful, inclusive, and scalable mentorship platform designed to amplify and support **women’s voices in tech**.
 
