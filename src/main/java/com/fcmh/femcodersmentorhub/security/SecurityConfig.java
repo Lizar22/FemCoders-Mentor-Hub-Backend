@@ -31,6 +31,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/mentors/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/mentors").hasRole("MENTOR")
                         .requestMatchers("/api/mentors/me").hasRole("MENTOR")
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         //.requestMatchers("/test/**").permitAll()
                         .anyRequest().authenticated()
                 )
