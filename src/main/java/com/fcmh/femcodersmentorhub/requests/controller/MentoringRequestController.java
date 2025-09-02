@@ -52,7 +52,6 @@ public class MentoringRequestController {
             @ApiResponse(responseCode = "401", description = "Unauthorized: invalid or missing JWT"),
             @ApiResponse(responseCode = "404", description = "Mentor profile not found")
     })
-    @Parameter(description = "Mentoring request data", required = true)
     public ResponseEntity<SuccessResponse<MentoringRequestResponse>> createMentoringRequest(
             @Valid @RequestBody MentoringRequestMenteeRequest request, Authentication authentication) {
 
@@ -73,7 +72,6 @@ public class MentoringRequestController {
             @ApiResponse(responseCode = "404", description = "Mentoring request not found")
     })
     @Parameter(description = "ID of the mentoring request", required = true)
-    @Parameter(description = "Mentor's response data", required = true)
     public ResponseEntity<SuccessResponse<MentoringRequestResponse>> respondToRequest(
             @PathVariable Long id,
             @Valid @RequestBody MentoringRequestMentorUpdatedResponse mentorUpdatedResponse, Authentication authentication) {
