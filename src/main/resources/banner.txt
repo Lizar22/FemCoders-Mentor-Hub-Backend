@@ -14,4 +14,5 @@ ${AnsiColor.CYAN}
  ╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚═════╝ ╚═════╝
 
 ${AnsiColor.MAGENTA}© 2025 FemCodersMentorHub. All rights reserved - Version 1.0
+${AnsiColor.CYAN}Licensed under the Apache License, Version 2.0
 ${AnsiColor.DEFAULT}
