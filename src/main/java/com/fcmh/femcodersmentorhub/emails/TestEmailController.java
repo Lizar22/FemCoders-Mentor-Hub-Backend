@@ -1,4 +1,3 @@
-/*
 package com.fcmh.femcodersmentorhub.emails;
 
 import lombok.RequiredArgsConstructor;
@@ -40,4 +39,4 @@ public class TestEmailController {
 
         return "Email sent to mentee successfully. Check MailHog at http://localhost:8025";
     }
-}*/
+}
