@@ -32,6 +32,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MentorServiceImplTest {
+
     private static final Long TEST_USER_ID = 1L;
     private static final String TEST_FULL_NAME = "Cris Mouta";
     private static final List<String> TEST_TECHNOLOGIES = List.of("Java", "Spring Boot", "React");
@@ -59,6 +60,7 @@ class MentorServiceImplTest {
 
     @BeforeEach
     void setUp() {
+
         testUser = createTestUser();
         testMentorProfile = createTestMentorProfile();
         testMentorRequest = createTestMentorRequest();
@@ -67,6 +69,7 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("GET /mentors - should list all mentors successfully")
     void getAllMentors_WhenValidData_ReturnsOkAndListOfMentors() {
+
         List<String> technologies = List.of("Java", "Spring Boot");
         List<Level> levels = List.of(Level.SENIOR);
         List<MentorProfile> mockProfiles = List.of(testMentorProfile);
@@ -79,12 +82,14 @@ class MentorServiceImplTest {
         assertThat(result.getFirst().fullName()).isEqualTo(TEST_FULL_NAME);
         assertThat(result.getFirst().level()).isEqualTo(TEST_LEVEL);
         assertThat(result.getLast().technologies()).isEqualTo(TEST_TECHNOLOGIES);
+
         verify(mentorRepository).findByFilters(technologies, levels);
     }
 
     @Test
     @DisplayName("GET /mentors - should return empty list when no mentors found")
     void getAllMentors_WhenNoMentorsFoud_ReturnsEmptyList() {
+
         List<String> technologies = List.of("Python");
         List<Level> levels = List.of(Level.JUNIOR);
 
@@ -93,34 +98,40 @@ class MentorServiceImplTest {
         List<MentorResponse> result = mentorServiceImpl.getAllMentors(technologies, levels);
 
         assertThat(result).isEmpty();
+
         verify(mentorRepository).findByFilters(technologies, levels);
     }
 
     @Test
     @DisplayName("GET /mentors - should handle null filters")
     void getAllMentors_WhenNullFilters_CallsRepositoryWithNullValues() {
+
         when(mentorRepository.findByFilters(null, null)).thenReturn(List.of(testMentorProfile));
 
         List<MentorResponse> result = mentorServiceImpl.getAllMentors(null, null);
 
         assertThat(result).hasSize(1);
+
         verify(mentorRepository).findByFilters(null, null);
     }
 
     @Test
     @DisplayName("GET /mentors - should handle mixed null filters")
     void getAllMentors_WhenMixedNullFilters_CallsRepositoryCorrectly() {
+
         when(mentorRepository.findByFilters(TEST_TECHNOLOGIES, null)).thenReturn(List.of(testMentorProfile));
 
         List<MentorResponse> result = mentorServiceImpl.getAllMentors(TEST_TECHNOLOGIES, null);
 
         assertThat(result).hasSize(1);
+
         verify(mentorRepository).findByFilters(TEST_TECHNOLOGIES, null);
     }
 
     @Test
     @DisplayName("GET /mentors/{id} - should return mentor profile when valid ID provided")
     void getMentorProfileById_WhenValidId_ReturnsMentorResponse() {
+
         when(mentorRepository.findById(TEST_USER_ID)).thenReturn(Optional.of(testMentorProfile));
 
         MentorResponse result = mentorServiceImpl.getMentorProfileById(TEST_USER_ID);
@@ -130,12 +141,14 @@ class MentorServiceImplTest {
         assertThat(result.technologies()).isEqualTo(TEST_TECHNOLOGIES);
         assertThat(result.level()).isEqualTo(TEST_LEVEL);
         assertThat(result.bio()).isEqualTo(TEST_BIO);
+
         verify(mentorRepository).findById(TEST_USER_ID);
     }
 
     @Test
     @DisplayName("GET /mentors/{id} - should return mentor not found error 404 when invalid ID provided")
     void getMentorProfileById_WhenInvalidId_ThrowsUserNotFoundException() {
+
         when(mentorRepository.findById(INVALID_ID)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> mentorServiceImpl.getMentorProfileById(INVALID_ID))
@@ -148,7 +161,9 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("POST /mentors - should create mentor profile when user has no existing profile")
     void addMentorProfile_WhenNoExistingProfile_ReturnsOkAndCreatesMentorProfile() {
+
         mockAuthenticatedUser();
+
         when(mentorRepository.existsByUser(testUser)).thenReturn(false);
         when(mentorRepository.save(any(MentorProfile.class))).thenReturn(testMentorProfile);
 
@@ -156,6 +171,7 @@ class MentorServiceImplTest {
 
         assertThat(result).isNotNull();
         assertThat(result.fullName()).isEqualTo(TEST_FULL_NAME);
+
         verify(mentorRepository).existsByUser(testUser);
         verify(mentorRepository).save(any(MentorProfile.class));
     }
@@ -163,7 +179,9 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("POST /mentors - should return mentor profile already exists error 409")
     void addMentorProfile_WhenProfileAlreadyExists_ThrowsException() {
+
         mockAuthenticatedUser();
+
         when(mentorRepository.existsByUser(testUser)).thenReturn(true);
 
         assertThatThrownBy(() -> mentorServiceImpl.addMentorProfile(testMentorRequest, authentication))
@@ -177,7 +195,9 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("PUT /mentors/me - should update mentor profile when exists")
     void updateMentorProfile_WhenProfileExists_UpdatesSuccessfully() {
+
         mockAuthenticatedUser();
+
         when(mentorRepository.findByUser(testUser)).thenReturn(Optional.of(testMentorProfile));
         when(mentorRepository.save(testMentorProfile)).thenReturn(testMentorProfile);
 
@@ -185,6 +205,7 @@ class MentorServiceImplTest {
 
         assertThat(result).isNotNull();
         assertThat(result.fullName()).isEqualTo(TEST_FULL_NAME);
+
         verify(mentorRepository).findByUser(testUser);
         verify(mentorRepository).save(testMentorProfile);
 
@@ -197,7 +218,9 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("PUT /mentors/me - should return mentor profile not found error 404")
     void updateMentorProfile_WhenProfileNotFound_ThrowsException() {
+
         mockAuthenticatedUser();
+
         when(mentorRepository.findByUser(testUser)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> mentorServiceImpl.updateMentorProfile(testMentorRequest, authentication))
@@ -211,7 +234,9 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("DELETE /mentors/me - should delete mentor profile when exists")
     void deleteMentorProfile_WhenProfileExists_DeletesSuccessfully() {
+
         mockAuthenticatedUser();
+
         when(mentorRepository.findByUser(testUser)).thenReturn(Optional.of(testMentorProfile));
 
         mentorServiceImpl.deleteMentorProfile(authentication);
@@ -223,7 +248,9 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("DELETE /mentors/me - should return mentor profile not found error 404")
     void deleteMentorProfile_WhenProfileNotFound_ThrowsException() {
+
         mockAuthenticatedUser();
+
         when(mentorRepository.findByUser(testUser)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> mentorServiceImpl.deleteMentorProfile(authentication))
@@ -237,6 +264,7 @@ class MentorServiceImplTest {
     @Test
     @DisplayName("Should return user not found error in authentication")
     void authenticatedUser_WhenUserNotFound_ThrowsUsernameNotFoundException() {
+
         when(authentication.getName()).thenReturn(NON_EXISTENT_USERNAME);
         when(userAuthRepository.findByUsername(NON_EXISTENT_USERNAME)).thenReturn(Optional.empty());
 
@@ -248,12 +276,15 @@ class MentorServiceImplTest {
     }
 
     private UserAuth createTestUser() {
+
         UserAuth user = new UserAuth();
         user.setUsername(TEST_USERNAME);
+
         return user;
     }
 
     private MentorProfile createTestMentorProfile() {
+
         MentorProfile mentor = new MentorProfile();
         mentor.setId(TEST_USER_ID);
         mentor.setUser(testUser);
@@ -261,14 +292,17 @@ class MentorServiceImplTest {
         mentor.setTechnologies(TEST_TECHNOLOGIES);
         mentor.setLevel(TEST_LEVEL);
         mentor.setBio(TEST_BIO);
+
         return mentor;
     }
 
     private MentorRequest createTestMentorRequest() {
+
         return new MentorRequest(TEST_FULL_NAME, TEST_TECHNOLOGIES, TEST_LEVEL, TEST_BIO);
     }
 
     private void mockAuthenticatedUser() {
+
         when(authentication.getName()).thenReturn(TEST_USERNAME);
         when(userAuthRepository.findByUsername(TEST_USERNAME)).thenReturn(Optional.of(testUser));
     }
