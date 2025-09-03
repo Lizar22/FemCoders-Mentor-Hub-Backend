@@ -93,7 +93,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
 
         MentorProfile mentorProfile = mentorRepository.findByUser(user).orElseThrow(() -> new MentorProfileNotFoundException("Mentor profile not found"));
 
-        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + "not found"));
+        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + " not found"));
 
         if (!mentoringRequest.getMentorProfile().equals(mentorProfile)) {
             throw new UnauthorizedMentoringRequestException("You do not have permission to respond to this request");
