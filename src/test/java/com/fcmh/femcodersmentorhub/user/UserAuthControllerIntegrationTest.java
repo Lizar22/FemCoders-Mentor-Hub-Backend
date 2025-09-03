@@ -31,6 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class UserAuthControllerIntegrationTest {
 
+    private static final String REGISTER_URL = "/api/auth/register";
+    private static final String LOGIN_URL = "/api/auth/login";
+    private static final String TEST_USERNAME = "Cris Mouta";
+    private static final String TEST_EMAIL = "cris.mouta@fcmh.com";
+    private static final String TEST_PASSWORD = "Password123.";
+    private static final Role TEST_ROLE = Role.MENTOR;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -48,15 +55,9 @@ public class UserAuthControllerIntegrationTest {
 
     private ApiSuccessResponseTestHelper apiHelper;
 
-    private static final String REGISTER_URL = "/api/auth/register";
-    private static final String LOGIN_URL = "/api/auth/login";
-    private static final String TEST_USERNAME = "Cris Mouta";
-    private static final String TEST_EMAIL = "cris.mouta@fcmh.com";
-    private static final String TEST_PASSWORD = "Password123.";
-    private static final Role TEST_ROLE = Role.MENTOR;
-
     @BeforeEach
     void setUp() {
+
         apiHelper = new ApiSuccessResponseTestHelper(mockMvc, objectMapper);
         userAuthRepository.deleteAll();
     }
@@ -64,6 +65,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /register - should add a new user successfully")
     void addUser_WhenValidData_ReturnsOkAndAddedUser() throws Exception {
+
         UserAuthRequest newUser = new UserAuthRequest(
                 TEST_USERNAME,
                 TEST_EMAIL,
@@ -88,6 +90,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /register - should return 409 when email already exists")
     void addUser_WhenEmailExists_ReturnsConflict() throws Exception {
+
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
 
         UserAuthRequest duplicateEmailUser = new UserAuthRequest(
@@ -108,6 +111,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /register - should return 409 when username already exists")
     void addUser_WhenUsernameExists_ReturnsConflict() throws Exception {
+
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
 
         UserAuthRequest duplicateUsernameUser = new UserAuthRequest(
@@ -128,6 +132,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /register - should return 400 for invalid email")
     void addUser_WhenInvalidEmail_ReturnsBadRequest() throws Exception {
+
         UserAuthRequest invalidEmailUser = new UserAuthRequest(
                 TEST_USERNAME,
                 "invalid email",
@@ -146,6 +151,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /register - should return 400 for weak password")
     void addUser_WhenWeakPassword_ReturnsBadRequest() throws Exception {
+
         UserAuthRequest weakPasswordUser = new UserAuthRequest(
                 TEST_USERNAME,
                 TEST_EMAIL,
@@ -164,6 +170,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /login - should login successfully with email")
     void login_WhenValidEmailAndPassword_ReturnsToken() throws Exception {
+
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
 
         LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, TEST_PASSWORD);
@@ -177,6 +184,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /login - should login successfully with username")
     void login_WhenValidUsernameAndPassword_ReturnsToken() throws Exception {
+
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
 
         LoginRequest loginRequest = new LoginRequest(TEST_USERNAME, TEST_PASSWORD);
@@ -190,6 +198,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /login - should return 401 for nonexistent user")
     void login_WhenUserNotFound_ReturnsUnauthorized() throws Exception {
+
         LoginRequest loginRequest = new LoginRequest("Nonexistent@fcmh.com", TEST_PASSWORD);
 
         apiHelper.performErrorRequest(post(LOGIN_URL),
@@ -203,6 +212,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /login - should return 401 for wrong password")
     void login_WhenPasswordIsIncorrect_ReturnsUnauthorized() throws Exception {
+
         userTestHelper.existingUser(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
 
         LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, "WrongPassword123.");
@@ -218,6 +228,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /login - should return 400 for empty identifier")
     void login_WhenEmptyIdentifier_ReturnsBadRequest() throws Exception {
+
         LoginRequest loginRequest = new LoginRequest("", TEST_PASSWORD);
 
         apiHelper.performErrorRequest(post(LOGIN_URL),
@@ -231,6 +242,7 @@ public class UserAuthControllerIntegrationTest {
     @Test
     @DisplayName("POST /login - should return 400 for empty password")
     void login_WhenEmptyPassword_ReturnsBadRequest() throws Exception {
+
         LoginRequest loginRequest = new LoginRequest(TEST_USERNAME, "");
 
         apiHelper.performErrorRequest(post(LOGIN_URL),

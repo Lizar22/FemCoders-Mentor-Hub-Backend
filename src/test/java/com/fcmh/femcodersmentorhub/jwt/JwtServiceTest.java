@@ -21,23 +21,26 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class JwtServiceTest {
 
-    @InjectMocks
-    private JwtService jwtService;
-
     private CustomUserDetails testUserDetails;
     private static final String TEST_USERNAME = "Cris Mouta";
     private static final Role TEST_ROLE = Role.MENTOR;
     private static final String TEST_JWT_SECRET_KEY = "mySecretKeyForTestingPurposesOnly123456789123456789";
     private static final Long TEST_JWT_EXPIRATION = 18000000L;
 
+    @InjectMocks
+    private JwtService jwtService;
+
     @BeforeEach
     void setUp() {
+
         ReflectionTestUtils.setField(jwtService, "jwtSecretKey", TEST_JWT_SECRET_KEY);
         ReflectionTestUtils.setField(jwtService, "jwtExpiration", TEST_JWT_EXPIRATION);
     }
 
     private String generateTestToken() {
+
         testUserDetails = mock(CustomUserDetails.class);
+
         when(testUserDetails.getUsername()).thenReturn(TEST_USERNAME);
 
         doReturn(List.of(new SimpleGrantedAuthority("ROLE_" + TEST_ROLE.name())))
@@ -49,6 +52,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Generate Token - should generate valid JWT token")
     void generateToken_WhenValidUserDetails_ReturnsValidToken() {
+
         String token = generateTestToken();
 
         assertNotNull(token);
@@ -59,6 +63,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Extract Username - should extract username from valid JWT token")
     void extractUsername_WhenValidToken_ReturnsCorrectUsername() {
+
         String token = generateTestToken();
 
         String extractedUsername = jwtService.extractUsername(token);
@@ -69,6 +74,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Extract Username - should throw exception for invalid token")
     void extractUsername_WhenInvalidToken_ThrowsException() {
+
         String invalidToken = "lololo";
 
         assertThrows(Exception.class, () -> jwtService.extractUsername(invalidToken));
@@ -77,6 +83,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Extract Expiration - should extract expiration date from valid JWT token")
     void extractExpiration_WhenValidToken_ReturnsValidExpirationDate() {
+
         String token = generateTestToken();
         Date afterGeneration = new Date();
         Date extractedExpiration = jwtService.extractExpiration(token);
@@ -91,6 +98,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Extract Expiration - should throw exception for invalid token")
     void extractExpiration_WhenInvalidToken_ThrowsException() {
+
         String invalidToken = "lololo";
 
         assertThrows(Exception.class, () -> jwtService.extractExpiration(invalidToken));
@@ -99,6 +107,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Is Valid Token - should return true for valid token and matching user")
     void isValidToken_WhenValidTokenAndMatchingUser_ReturnsTrue() {
+
         String token = generateTestToken();
 
         boolean isValid = jwtService.isValidToken(token, testUserDetails);
@@ -109,6 +118,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Is Valid Token - should return false for valid token and unmatching user")
     void isValidToken_WhenValidTokenButDifferentUser_ReturnsFalse() {
+
         String token = generateTestToken();
         CustomUserDetails differentUser = mock(CustomUserDetails.class);
 
@@ -122,6 +132,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Is Valid Token - should return false for invalid token")
     void isValidToken_WhenInvalidToken_ReturnsFalse() {
+
         String invalidToken = "lololo";
 
         boolean isValid = jwtService.isValidToken(invalidToken, testUserDetails);
@@ -133,6 +144,7 @@ public class JwtServiceTest {
     @DisplayName("Is Valid Token - should return false for expired token")
     void isValidToken_WhenExpiredToken_ReturnsFalse() throws InterruptedException {
         ReflectionTestUtils.setField(jwtService, "jwtExpiration", 1L);
+
         String token = generateTestToken();
 
         Thread.sleep(10);
@@ -145,6 +157,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Is Valid Token - should return false for null token")
     void isValidToken_WhenNullToken_ReturnsFalse() {
+
         boolean isValid = jwtService.isValidToken(null, testUserDetails);
 
         assertFalse(isValid);
@@ -153,6 +166,7 @@ public class JwtServiceTest {
     @Test
     @DisplayName("Is Valid Token - should return false for empty token")
     void isValidToken_WhenEmptyToken_ReturnsFalse() {
+
         boolean isValid = jwtService.isValidToken("", testUserDetails);
 
         assertFalse(isValid);
