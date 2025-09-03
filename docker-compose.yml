@@ -9,8 +9,6 @@ services:
       MYSQL_DATABASE: femcoders_mentor_hub
     ports:
       - "3307:3306"  # Avoid WorkBench port
-    volumes:
-      - db_data:/var/lib/mysql
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pfcmh"]
@@ -56,9 +54,6 @@ services:
       start_period: 60s
     networks:
       - fcmh-network
-
-volumes:
-  db_data:
 
 networks:
   fcmh-network:

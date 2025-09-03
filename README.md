@@ -168,9 +168,11 @@ docker run -p 8080:8080 femcoders-mentor-hub
 
 **Option 2 – Use pre-built image from Docker Hub**
 
+Pull the image with the latest tag:
+
 ```bash
-docker pull your-dockerhub-username/femcoders-mentor-hub:latest
-docker run -p 8080:8080 your-dockerhub-username/femcoders-mentor-hub:latest
+docker pull lizar22/femcoders-mentor-hub-app:latest
+docker run -p 8080:8080 lizar22/femcoders-mentor-hub-app:latest
 ```
 
 The API will be available at:
