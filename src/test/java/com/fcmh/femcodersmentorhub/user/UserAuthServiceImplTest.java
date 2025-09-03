@@ -44,6 +44,18 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserAuthServiceImplTest {
 
+    private UserAuth testUserAuth;
+    private UserAuthRequest testUserAuthRequest;
+    private static final Long TEST_USER_ID = 1L;
+    private static final String TEST_USERNAME = "Cris Mouta";
+    private static final String TEST_EMAIL = "cris.mouta@fcmh.com";
+    private static final String TEST_PASSWORD = "Password123.";
+    private static final String ENCODED_PASSWORD = "$2a$10$EncodedPasswordHash";
+    private static final String TEST_JWT_TOKEN = "jwt.token.example";
+    private static final Role TEST_ROLE = Role.MENTOR;
+    private static final String TEST_IDENTIFIER_EMAIL = "cris.mouta@fcmh.com";
+    private static final String TEST_IDENTIFIER_USERNAME = "Cris Mouta";
+
     @Mock
     private UserAuthRepository userAuthRepository;
 
@@ -63,26 +75,16 @@ public class UserAuthServiceImplTest {
     private UserAuthServiceImpl userAuthService;
     private static Validator validator;
 
-    private UserAuth testUserAuth;
-    private UserAuthRequest testUserAuthRequest;
-    private static final Long TEST_USER_ID = 1L;
-    private static final String TEST_USERNAME = "Cris Mouta";
-    private static final String TEST_EMAIL = "cris.mouta@fcmh.com";
-    private static final String TEST_PASSWORD = "Password123.";
-    private static final String ENCODED_PASSWORD = "$2a$10$EncodedPasswordHash";
-    private static final String TEST_JWT_TOKEN = "jwt.token.example";
-    private static final Role TEST_ROLE = Role.MENTOR;
-    private static final String TEST_IDENTIFIER_EMAIL = "cris.mouta@fcmh.com";
-    private static final String TEST_IDENTIFIER_USERNAME = "Cris Mouta";
-
     @BeforeAll
     static void setUpValidator() {
+
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @BeforeEach
     void setUp() {
+
         testUserAuth = new UserAuth();
         testUserAuth.setId(TEST_USER_ID);
         testUserAuth.setUsername(TEST_USERNAME);
@@ -96,6 +98,7 @@ public class UserAuthServiceImplTest {
     @Test
     @DisplayName("POST /register - should add a new user successfully")
     void addUser_WhenValidData_ReturnsOkAndCreatedUser() {
+
         when(userAuthRepository.existsByEmail(TEST_EMAIL)).thenReturn(false);
         when(userAuthRepository.existsByUsername(TEST_USERNAME)).thenReturn(false);
         when(passwordEncoder.encode(TEST_PASSWORD)).thenReturn(ENCODED_PASSWORD);
@@ -107,6 +110,7 @@ public class UserAuthServiceImplTest {
         assertNotNull(result);
         assertEquals(TEST_USERNAME, result.username());
         assertEquals(TEST_EMAIL,result.email());
+
         verify(userAuthRepository).existsByEmail(TEST_EMAIL);
         verify(userAuthRepository).existsByUsername(TEST_USERNAME);
         verify(passwordEncoder).encode(TEST_PASSWORD);
@@ -117,6 +121,7 @@ public class UserAuthServiceImplTest {
     @Test
     @DisplayName("POST /register - should return an user already exists error 409")
     void addUser_WhenEmailAlreadyExists_ReturnsUserAlreadyExistsError() {
+
         when(userAuthRepository.existsByEmail(TEST_EMAIL)).thenReturn(true);
 
         UserAlreadyExistsException exception = assertThrows(
@@ -125,6 +130,7 @@ public class UserAuthServiceImplTest {
         );
 
         assertTrue(exception.getMessage().contains("email"));
+
         verify(userAuthRepository).existsByEmail(TEST_EMAIL);
         verify(userAuthRepository, never()).save(any());
     }
@@ -132,6 +138,7 @@ public class UserAuthServiceImplTest {
     @Test
     @DisplayName("POST /register - should return an user already exists error 409")
     void addUser_WhenUsernameAlreadyExists_ReturnsUserAlreadyExistsError() {
+
         when(userAuthRepository.existsByEmail(TEST_EMAIL)).thenReturn(false);
         when(userAuthRepository.existsByUsername(TEST_USERNAME)).thenReturn(true);
 
@@ -141,6 +148,7 @@ public class UserAuthServiceImplTest {
         );
 
         assertTrue(exception.getMessage().contains("username"));
+
         verify(userAuthRepository).existsByUsername(TEST_USERNAME);
         verify(userAuthRepository, never()).save(any());
     }
@@ -163,6 +171,7 @@ public class UserAuthServiceImplTest {
     @ParameterizedTest(name = "{index} -> {1}")
     @MethodSource("invalidUserAuthDtos")
     void whenInvalidUserAuthDto_ReturnsValidationError(UserAuthRequest dto, String expectedMessage) {
+
         Set<ConstraintViolation<UserAuthRequest>> violations = validator.validate(dto);
 
         assertTrue(violations
@@ -174,6 +183,7 @@ public class UserAuthServiceImplTest {
     @DisplayName("POST /login - should login a user successfully")
     @ValueSource(strings = {TEST_IDENTIFIER_EMAIL, TEST_IDENTIFIER_USERNAME})
     void login_WhenValidIdentifier_ReturnsToken(String identifier) {
+
         Authentication mockAuthentication = mock(Authentication.class);
         CustomUserDetails mockUserDetails = mock(CustomUserDetails.class);
         LoginRequest loginRequest = new LoginRequest(identifier, TEST_PASSWORD);
@@ -189,6 +199,7 @@ public class UserAuthServiceImplTest {
         assertEquals(TEST_JWT_TOKEN, result.token());
         assertNotNull(result.token(), "Token should not be null");
         assertFalse(result.token().isBlank(), "Token should not be empty");
+
         verify(authenticationManager).authenticate(any());
         verify(jwtService).generateToken(mockUserDetails);
     }
@@ -196,6 +207,7 @@ public class UserAuthServiceImplTest {
     @Test
     @DisplayName("POST /login - should return user not found error 404")
     void login_WhenUserNotFound_ThrowsUserNotFoundException(){
+
         LoginRequest loginRequest = new LoginRequest(TEST_IDENTIFIER_USERNAME, TEST_PASSWORD);
 
         when(authenticationManager.authenticate(any())).thenThrow(new UsernameNotFoundException("User not found"));
@@ -204,12 +216,14 @@ public class UserAuthServiceImplTest {
                 () -> userAuthService.login(loginRequest));
 
         assertTrue(exception.getMessage().contains("User not found: " + loginRequest.identifier()));
+
         verify(authenticationManager).authenticate(any());
     }
 
     @Test
     @DisplayName("POST /login - should return invalid credentials error 401")
     void login_WhenInvalidCredentials_ThrowsInvalidCredentialsException(){
+
         LoginRequest loginRequest = new LoginRequest(TEST_IDENTIFIER_EMAIL, TEST_PASSWORD);
 
         when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("Bad credentials"));
@@ -218,6 +232,7 @@ public class UserAuthServiceImplTest {
                 () -> userAuthService.login(loginRequest));
 
         assertTrue(exception.getMessage().contains("Invalid credentials for: " + loginRequest.identifier()));
+
         verify(authenticationManager).authenticate(any());
     }
 
@@ -237,6 +252,7 @@ public class UserAuthServiceImplTest {
     @ParameterizedTest(name = "{index} -> {1}")
     @MethodSource("invalidLoginDtos")
     void whenInvalidLoginDto_ReturnsValidationError(LoginRequest dto, String expectedMessage) {
+
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(dto);
 
         assertTrue(violations

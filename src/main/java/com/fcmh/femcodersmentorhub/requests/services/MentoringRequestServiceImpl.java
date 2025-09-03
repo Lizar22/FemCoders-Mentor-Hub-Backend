@@ -19,6 +19,7 @@ import com.fcmh.femcodersmentorhub.requests.repository.MentoringRequestRepositor
 import com.fcmh.femcodersmentorhub.security.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class MentoringRequestServiceImpl implements MentoringRequestService{
 
     private static final String DATE_TIME_PATTERN = "dd/MM/yyyy 'at' HH:mm";
@@ -93,7 +95,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
 
         MentorProfile mentorProfile = mentorRepository.findByUser(user).orElseThrow(() -> new MentorProfileNotFoundException("Mentor profile not found"));
 
-        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + "not found"));
+        MentoringRequest mentoringRequest = mentoringRequestRepository.findById(id).orElseThrow(() -> new MentoringRequestNotFoundException("Mentoring request with id " + id + " not found"));
 
         if (!mentoringRequest.getMentorProfile().equals(mentorProfile)) {
             throw new UnauthorizedMentoringRequestException("You do not have permission to respond to this request");
@@ -134,6 +136,8 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
                     formatScheduledDate(request.getScheduledAt())
             );
         } catch (Exception exception) {
+            log.error("Error sending request notification to mentor {} for topic {}",
+                    request.getMentorProfile().getFullName(), request.getTopic(), exception);
         }
     }
 
@@ -149,6 +153,8 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
                     request.getMeetingLink()
             );
         } catch (Exception exception) {
+            log.error("Error sending response notification to mentee {} for topic {}",
+                    request.getMentee().getUsername(), request.getTopic(), exception);
         }
     }
 }

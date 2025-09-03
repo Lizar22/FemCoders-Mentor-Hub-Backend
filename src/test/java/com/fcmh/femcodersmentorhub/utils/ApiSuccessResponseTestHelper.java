@@ -1,6 +1,7 @@
 package com.fcmh.femcodersmentorhub.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -9,17 +10,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class ApiTestHelper {
+@RequiredArgsConstructor
+public class ApiSuccessResponseTestHelper {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
-    public ApiTestHelper(MockMvc mockMvc, ObjectMapper objectMapper) {
-        this.mockMvc = mockMvc;
-        this.objectMapper = objectMapper;
-    }
-
     public <T> ResultActions performRequest(MockHttpServletRequestBuilder requestBuilder, T requestBody, String expectedMessage) throws Exception {
+
         String json = objectMapper.writeValueAsString(requestBody);
 
         return mockMvc.perform(requestBuilder
@@ -36,6 +34,7 @@ public class ApiTestHelper {
                                         String expectedErrorCode,
                                         int expectedStatus,
                                         String expectedMessageContains) throws Exception {
+
         String json = objectMapper.writeValueAsString(requestBody);
 
         mockMvc.perform(requestBuilder
