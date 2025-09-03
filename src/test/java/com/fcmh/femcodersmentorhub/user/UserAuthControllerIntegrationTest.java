@@ -6,7 +6,7 @@ import com.fcmh.femcodersmentorhub.auth.dtos.login.LoginRequest;
 import com.fcmh.femcodersmentorhub.auth.dtos.register.UserAuthRequest;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.security.Role;
-import com.fcmh.femcodersmentorhub.utils.ApiTestHelper;
+import com.fcmh.femcodersmentorhub.utils.ApiSuccessResponseTestHelper;
 import com.fcmh.femcodersmentorhub.utils.UserTestHelper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -47,7 +46,7 @@ public class UserAuthControllerIntegrationTest {
     @Autowired
     private UserTestHelper userTestHelper;
 
-    private ApiTestHelper apiHelper;
+    private ApiSuccessResponseTestHelper apiHelper;
 
     private static final String REGISTER_URL = "/api/auth/register";
     private static final String LOGIN_URL = "/api/auth/login";
@@ -58,7 +57,7 @@ public class UserAuthControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        apiHelper = new ApiTestHelper(mockMvc, objectMapper);
+        apiHelper = new ApiSuccessResponseTestHelper(mockMvc, objectMapper);
         userAuthRepository.deleteAll();
     }
 
