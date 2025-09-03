@@ -11,6 +11,7 @@ import com.fcmh.femcodersmentorhub.auth.exceptions.UserAlreadyExistsException;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
 import com.fcmh.femcodersmentorhub.auth.services.UserAuthServiceImpl;
+import com.fcmh.femcodersmentorhub.emails.EmailService;
 import com.fcmh.femcodersmentorhub.security.CustomUserDetails;
 import com.fcmh.femcodersmentorhub.security.Role;
 import com.fcmh.femcodersmentorhub.security.jwt.JwtService;
@@ -55,14 +56,15 @@ public class UserAuthServiceImplTest {
     @Mock
     private JwtService jwtService;
 
+    @Mock
+    private EmailService emailService;
+
     @InjectMocks
     private UserAuthServiceImpl userAuthService;
     private static Validator validator;
 
     private UserAuth testUserAuth;
     private UserAuthRequest testUserAuthRequest;
-    private UserAuthResponse testUserAuthResponse;
-    private LoginRequest testLoginRequest;
     private static final Long TEST_USER_ID = 1L;
     private static final String TEST_USERNAME = "Cris Mouta";
     private static final String TEST_EMAIL = "cris.mouta@fcmh.com";
@@ -89,8 +91,6 @@ public class UserAuthServiceImplTest {
         testUserAuth.setRole(TEST_ROLE);
 
         testUserAuthRequest = new UserAuthRequest(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD, TEST_ROLE);
-        testUserAuthResponse = new UserAuthResponse(TEST_USERNAME, TEST_EMAIL, TEST_ROLE);
-        testLoginRequest = new LoginRequest(TEST_IDENTIFIER_EMAIL, TEST_PASSWORD);
     }
 
     @Test
@@ -100,14 +100,18 @@ public class UserAuthServiceImplTest {
         when(userAuthRepository.existsByUsername(TEST_USERNAME)).thenReturn(false);
         when(passwordEncoder.encode(TEST_PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(userAuthRepository.save(any(UserAuth.class))).thenReturn(testUserAuth);
+        doNothing().when(emailService).sendWelcomeNotification(TEST_EMAIL, TEST_USERNAME);
 
         UserAuthResponse result = userAuthService.addUser(testUserAuthRequest);
 
         assertNotNull(result);
+        assertEquals(TEST_USERNAME, result.username());
+        assertEquals(TEST_EMAIL,result.email());
         verify(userAuthRepository).existsByEmail(TEST_EMAIL);
         verify(userAuthRepository).existsByUsername(TEST_USERNAME);
         verify(passwordEncoder).encode(TEST_PASSWORD);
         verify(userAuthRepository).save(any(UserAuth.class));
+        verify(emailService).sendWelcomeNotification(TEST_EMAIL, TEST_USERNAME);
     }
 
     @Test
