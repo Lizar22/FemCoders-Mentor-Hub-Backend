@@ -29,7 +29,6 @@ public class UserAuth {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    //mappedBy = "user"
     @OneToOne
     private MentorProfile mentorProfiles;
 }
