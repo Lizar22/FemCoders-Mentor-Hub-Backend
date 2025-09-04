@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.user;
+package com.fcmh.femcodersmentorhub.user.service;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 

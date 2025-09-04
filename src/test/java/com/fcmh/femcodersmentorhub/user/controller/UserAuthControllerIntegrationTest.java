@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.user;
+package com.fcmh.femcodersmentorhub.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
