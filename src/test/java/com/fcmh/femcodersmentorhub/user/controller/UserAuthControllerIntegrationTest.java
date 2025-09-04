@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -73,7 +74,7 @@ public class UserAuthControllerIntegrationTest {
                 TEST_ROLE
         );
 
-        apiHelper.performRequest(post(REGISTER_URL), newUser,"User registered successfully")
+        apiHelper.performRequest(post(REGISTER_URL), newUser,"User registered successfully", HttpStatus.CREATED)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.username").value(TEST_USERNAME))
                 .andExpect(jsonPath("$.data.email").value(TEST_EMAIL))
@@ -175,7 +176,7 @@ public class UserAuthControllerIntegrationTest {
 
         LoginRequest loginRequest = new LoginRequest(TEST_EMAIL, TEST_PASSWORD);
 
-        apiHelper.performRequest(post(LOGIN_URL), loginRequest, "Login successful")
+        apiHelper.performRequest(post(LOGIN_URL), loginRequest, "Login successful", HttpStatus.OK)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.token").isString())
                 .andExpect(jsonPath("$.data.token").value(notNullValue()));
@@ -189,7 +190,7 @@ public class UserAuthControllerIntegrationTest {
 
         LoginRequest loginRequest = new LoginRequest(TEST_USERNAME, TEST_PASSWORD);
 
-        apiHelper.performRequest(post(LOGIN_URL), loginRequest, "Login successful")
+        apiHelper.performRequest(post(LOGIN_URL), loginRequest, "Login successful", HttpStatus.OK)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.token").isString())
                 .andExpect(jsonPath("$.data.token").value(notNullValue()));

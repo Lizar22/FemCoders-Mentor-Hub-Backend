@@ -2,6 +2,7 @@ package com.fcmh.femcodersmentorhub.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -16,17 +17,27 @@ public class ApiSuccessResponseTestHelper {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
-    public <T> ResultActions performRequest(MockHttpServletRequestBuilder requestBuilder, T requestBody, String expectedMessage) throws Exception {
+    public <T> ResultActions performRequest(MockHttpServletRequestBuilder requestBuilder,
+                                            T requestBody,
+                                            String expectedMessage,
+                                            HttpStatus expectedStatus) throws Exception {
+        if (requestBody != null) {
+            String json = objectMapper.writeValueAsString(requestBody);
+            requestBuilder.contentType(MediaType.APPLICATION_JSON).content(json);
+        }
 
-        String json = objectMapper.writeValueAsString(requestBody);
-
-        return mockMvc.perform(requestBuilder
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+        return mockMvc.perform(requestBuilder)
+                .andExpect(status().is(expectedStatus.value()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value(expectedMessage))
                 .andExpect(jsonPath("$.data").exists());
+    }
+
+    public <T> ResultActions performRequest(MockHttpServletRequestBuilder requestBuilder,
+                                            T requestBody,
+                                            String expectedMessage) throws Exception {
+        return performRequest(requestBuilder, requestBody, expectedMessage, HttpStatus.OK);
     }
 
     public <T> void performErrorRequest(MockHttpServletRequestBuilder requestBuilder,
@@ -35,11 +46,13 @@ public class ApiSuccessResponseTestHelper {
                                         int expectedStatus,
                                         String expectedMessageContains) throws Exception {
 
-        String json = objectMapper.writeValueAsString(requestBody);
+        String json = requestBody != null ? objectMapper.writeValueAsString(requestBody) : null;
 
-        mockMvc.perform(requestBuilder
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+        if (json != null) {
+            requestBuilder.contentType(MediaType.APPLICATION_JSON).content(json);
+        }
+
+        mockMvc.perform(requestBuilder)
                 .andExpect(status().is(expectedStatus))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.errorCode").value(expectedErrorCode))

@@ -1,6 +1,5 @@
 package com.fcmh.femcodersmentorhub.auth;
 
-import com.fcmh.femcodersmentorhub.mentees.MenteeProfile;
 import com.fcmh.femcodersmentorhub.mentors.MentorProfile;
 import com.fcmh.femcodersmentorhub.security.Role;
 import jakarta.persistence.*;
@@ -33,8 +32,4 @@ public class UserAuth {
     //mappedBy = "user"
     @OneToOne
     private MentorProfile mentorProfiles;
-
-    //mappedBy = "user"
-    @OneToOne
-    private MenteeProfile menteeProfiles;
 }

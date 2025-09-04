@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.request;
+package com.fcmh.femcodersmentorhub.request.service;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;

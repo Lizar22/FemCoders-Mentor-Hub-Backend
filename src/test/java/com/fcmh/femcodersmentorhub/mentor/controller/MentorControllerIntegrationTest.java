@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -158,7 +159,7 @@ public class MentorControllerIntegrationTest {
 
         MentorRequest request = new MentorRequest(TEST_MENTOR_FULL_NAME, TEST_TECHNOLOGIES, TEST_LEVEL, TEST_BIO);
 
-        apiHelper.performRequest(post(BASE_URL), request, MSG_CREATED)
+        apiHelper.performRequest(post(BASE_URL), request, MSG_CREATED, HttpStatus.CREATED)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.fullName").value(TEST_MENTOR_FULL_NAME))
                 .andExpect(jsonPath("$.data.technologies").isArray())
@@ -195,7 +196,7 @@ public class MentorControllerIntegrationTest {
 
         MentorRequest updatedRequest = new MentorRequest(UPDATED_FULL_NAME, UPDATED_TECHNOLOGIES, UPDATED_LEVEL, TEST_BIO);
 
-        apiHelper.performRequest(put(BASE_URL + "/me"), updatedRequest, MSG_UPDATED)
+        apiHelper.performRequest(put(BASE_URL + "/me"), updatedRequest, MSG_UPDATED, HttpStatus.OK)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.fullName").value(UPDATED_FULL_NAME))
                 .andExpect(jsonPath("$.data.level").value(UPDATED_LEVEL.name()));
