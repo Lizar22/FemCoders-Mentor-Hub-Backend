@@ -1,0 +1,29 @@
+package com.fcmh.femcodersmentorhub.security;
+
+import com.fcmh.femcodersmentorhub.auth.UserAuth;
+import com.fcmh.femcodersmentorhub.auth.repository.UserAuthRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
+    private final UserAuthRepository userAuthRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        Optional<UserAuth> user = userAuthRepository.findByUsername(identifier);
+
+        if (user.isEmpty()) {
+            user = userAuthRepository.findByEmail(identifier);
+        }
+
+        return user.map(userEntity -> new CustomUserDetails(userEntity))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + identifier));
+    }
+}

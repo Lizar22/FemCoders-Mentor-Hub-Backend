@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.1
+    container_name: fcmh-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: femcoders_mentor_hub
+    ports:
+      - "3307:3306"  # Avoid WorkBench port
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pfcmh"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - fcmh-network
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: fcmh-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # UI web
+    restart: unless-stopped
+    networks:
+      - fcmh-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fcmh-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.docker
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      db:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - fcmh-network
+
+networks:
+  fcmh-network:
+    driver: bridge
