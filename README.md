@@ -163,7 +163,7 @@ You can either **build the image locally** or **pull it directly from Docker Hub
 **Option 1 – Build locally**
 ```bash
 docker build -t femcoders-mentor-hub .
-docker run -p 8080:8080 femcoders-mentor-hub
+docker-compose up -d
 ```
 
 **Option 2 – Use pre-built image from Docker Hub**
@@ -172,7 +172,7 @@ Pull the image with the latest tag:
 
 ```bash
 docker pull lizar22/femcoders-mentor-hub-app:latest
-docker run -p 8080:8080 lizar22/femcoders-mentor-hub-app:latest
+docker-compose up -d
 ```
 
 The API will be available at:
