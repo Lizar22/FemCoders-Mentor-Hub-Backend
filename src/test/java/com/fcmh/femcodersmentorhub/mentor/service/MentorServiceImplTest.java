@@ -1,4 +1,4 @@
-package com.fcmh.femcodersmentorhub.mentor;
+package com.fcmh.femcodersmentorhub.mentor.service;
 
 import com.fcmh.femcodersmentorhub.auth.UserAuth;
 import com.fcmh.femcodersmentorhub.auth.exceptions.UserNotFoundException;
