@@ -26,6 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -38,6 +39,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -50,6 +52,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -62,6 +65,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorResponse> handleExpiredTokenException(InvalidTokenException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -74,6 +78,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExpiredTokenException.class)
     public ResponseEntity<ErrorResponse> handleExpiredTokenException(ExpiredTokenException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -86,6 +91,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MentorProfileNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleMentorProfileNotFoundException(MentorProfileNotFoundException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -98,6 +104,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MentorProfileAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleMentorProfileAlreadyExistsException(MentorProfileAlreadyExistsException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -110,6 +117,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidMentoringRequestException.class)
     public ResponseEntity<ErrorResponse> handleInvalidMentoringRequestException(InvalidMentoringRequestException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -122,6 +130,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MentoringRequestNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleMentoringRequestNotFoundException (MentoringRequestNotFoundException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -134,6 +143,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedMentoringRequestException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedMentoringRequestException (UnauthorizedMentoringRequestException exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 exception.getErrorCode(),
                 exception.getMessage(),
@@ -146,6 +156,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+
         String message = exception.getBindingResult().getFieldErrors().stream()
                 .findFirst()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -163,6 +174,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception exception, HttpServletRequest request) {
+
         ErrorResponse error = buildErrorResponse(
                 ErrorCode.SERVER_01,
                 "Internal server error",
