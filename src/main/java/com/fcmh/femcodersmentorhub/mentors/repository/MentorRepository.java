@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MentorRepository extends JpaRepository <MentorProfile, Long> {
+
     boolean existsByUser(UserAuth user);
+
     Optional<MentorProfile> findByUser(UserAuth user);
 
     @Query("SELECT DISTINCT m FROM MentorProfile m JOIN m.technologies t WHERE " +

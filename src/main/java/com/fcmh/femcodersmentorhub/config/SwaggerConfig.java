@@ -15,10 +15,12 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI femCodersMentorHubOpenApi() {
+
         return new OpenAPI()
                 .info(new Info()
                         .title("FemCoders Mentor Hub API")
-                        .description("REST API built with Java/Spring Boot that connects female mentors and mentees in technology through mentoring sessions. It implements JWT authentication, advanced search filters, and layered architecture with JPA/Hibernate.")
+                        .description("REST API built with Java/Spring Boot that connects female mentors and mentees in technology through mentoring sessions. " +
+                                "It implements JWT authentication, advanced search filters, and layered architecture with JPA/Hibernate.")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("FemCoders Mentor Hub Team")

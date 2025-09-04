@@ -10,7 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MentoringRequestRepository extends JpaRepository<MentoringRequest, Long> {
+
     List<MentoringRequestResponse> findByMentee(UserAuth mentee);
     List<MentoringRequestResponse> findByMentorProfile(MentorProfile mentorProfile);
+
     boolean existsByMenteeAndMentorProfileAndStatus(UserAuth mentee, MentorProfile mentorProfile, RequestStatus status);
 }

@@ -43,6 +43,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
 
     @Override
     public List<MentoringRequestResponse> getMyMentoringRequests(Authentication authentication) {
+
         UserAuth user = getAuthenticatedUser(authentication);
 
         if (user.getRole() == Role.MENTEE) {
@@ -59,6 +60,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
 
     @Override
     public MentoringRequestResponse addMentoringRequest(MentoringRequestMenteeRequest request, Authentication authentication) {
+
         UserAuth mentee = getAuthenticatedUser(authentication);
 
         if (mentee.getRole() != Role.MENTEE) {
@@ -87,6 +89,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
 
     @Override
     public MentoringRequestResponse respondToRequest(Long id, MentoringRequestMentorUpdatedResponse mentorUpdatedResponse, Authentication authentication) {
+
         UserAuth user = getAuthenticatedUser(authentication);
 
         if (user.getRole() != Role.MENTOR) {
@@ -117,16 +120,20 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
     }
 
     private UserAuth getAuthenticatedUser(Authentication authentication) {
+
         String username = authentication.getName();
+
         return userAuthRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     private String formatScheduledDate(LocalDateTime scheduledAt) {
+
         return scheduledAt.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 
     private void sendRequestNotificationToMentor(MentoringRequest request) {
+
         try {
             emailService.sendRequestNotificationToMentor(
                     request.getMentorProfile().getUser().getEmail(),
@@ -142,6 +149,7 @@ public class MentoringRequestServiceImpl implements MentoringRequestService{
     }
 
     private void sendResponseNotificationToMentee(MentoringRequest request) {
+
         try {
             emailService.sendResponseNotificationToMentee(
                     request.getMentee().getEmail(),

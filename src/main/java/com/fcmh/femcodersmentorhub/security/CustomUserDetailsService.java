@@ -13,10 +13,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
+
     private final UserAuthRepository userAuthRepository;
 
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+
         Optional<UserAuth> user = userAuthRepository.findByUsername(identifier);
 
         if (user.isEmpty()) {

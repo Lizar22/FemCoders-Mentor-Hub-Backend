@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 public class UserAuthServiceImpl implements UserAuthService {
+
     private final UserAuthRepository userAuthRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -35,6 +36,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public UserAuthResponse findUserById(Long id) {
+
         UserAuth user = userAuthRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
         return UserAuthMapper.entityToDto(user);
     }

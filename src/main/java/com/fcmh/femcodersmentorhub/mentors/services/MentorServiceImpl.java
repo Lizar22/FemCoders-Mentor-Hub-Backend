@@ -23,11 +23,13 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MentorServiceImpl implements MentorService {
+
     private final MentorRepository mentorRepository;
     private final UserAuthRepository userAuthRepository;
 
     @Override
     public List<MentorResponse> getAllMentors(List<String> technologies, List<Level> levels) {
+
         return mentorRepository.findByFilters(technologies, levels)
                 .stream()
                 .map(MentorMapper::entityToDto)
@@ -36,6 +38,7 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     public MentorResponse getMentorProfileById(Long id) {
+
         MentorProfile mentor = mentorRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
         return MentorMapper.entityToDto(mentor);
@@ -43,34 +46,41 @@ public class MentorServiceImpl implements MentorService {
 
     @Override
     public MentorResponse addMentorProfile(MentorRequest mentorRequest, Authentication authentication) {
+
         UserAuth user = getAuthenticatedUser(authentication);
 
         if (mentorRepository.existsByUser(user)) {
             throw new MentorProfileAlreadyExistsException("A mentor profile already exists for this user");
         }
+
         MentorProfile newMentor = MentorMapper.dtoToEntity(mentorRequest);
         newMentor.setUser(user);
         MentorProfile savedMentor = mentorRepository.save(newMentor);
+
         return MentorMapper.entityToDto(savedMentor);
     }
 
     @Override
     public MentorResponse updateMentorProfile(MentorRequest mentorRequest, Authentication authentication) {
+
         UserAuth user = getAuthenticatedUser(authentication);
 
         MentorProfile existingMentor = mentorRepository.findByUser(user)
                 .orElseThrow(() -> new MentorProfileNotFoundException("Mentor profile not found"));
+
         existingMentor.setFullName(mentorRequest.fullName());
         existingMentor.setTechnologies(mentorRequest.technologies());
         existingMentor.setLevel(mentorRequest.level());
         existingMentor.setBio(mentorRequest.bio());
 
         MentorProfile updatedMentor = mentorRepository.save(existingMentor);
+
         return MentorMapper.entityToDto(updatedMentor);
     }
 
     @Override
     public void deleteMentorProfile(Authentication authentication) {
+
         UserAuth user = getAuthenticatedUser(authentication);
 
         MentorProfile mentorProfile = mentorRepository.findByUser(user)
@@ -80,7 +90,9 @@ public class MentorServiceImpl implements MentorService {
     }
 
     private UserAuth getAuthenticatedUser(Authentication authentication) {
+
         String username = authentication.getName();
+
         return userAuthRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }

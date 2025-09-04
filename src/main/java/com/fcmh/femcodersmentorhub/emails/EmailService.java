@@ -82,6 +82,7 @@ public class EmailService {
     }
 
     private void sendEmail(EmailData emailData) {
+
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF8_ENCODING);
