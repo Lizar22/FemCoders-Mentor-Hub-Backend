@@ -48,4 +48,42 @@ public class UserTestHelper {
 
         return mentorRepository.save(mentorProfile);
     }
+
+    public record TestUsers(
+            Long mentorProfileId, Long anotherMentorProfileId
+    ){
+    }
+
+    public TestUsers createDefaultTestUsers() {
+
+        existingUser("ana.mentee", "ana.mentee@fcmh.com", "Password123.", Role.MENTEE);
+
+        MentorProfile mentorProfile = existingMentor(
+                "cris.mentor",
+                "cris.mentor@fcmh.com",
+                "Password123.",
+                "Cris Mentor",
+                List.of("Java", "Spring Boot"),
+                Level.SENIOR,
+                "Test bio"
+        );
+        Long mentorProfileId = mentorProfile.getId();
+
+        MentorProfile anotherMentorProfile = existingMentor(
+                "other.mentor",
+                "other.mentor@fcmh.com",
+                "Password123.",
+                "Another Mentor",
+                List.of("Python", "Django"),
+                Level.JUNIOR,
+                "Test bio"
+        );
+        Long anotherMentorProfileId = anotherMentorProfile.getId();
+
+        return new TestUsers(mentorProfileId, anotherMentorProfileId);
+    }
+
+    private Long getMentorProfileId(UserAuth mentorUser) {
+        return mentorRepository.findByUser(mentorUser).orElseThrow().getId();
+    }
 }
