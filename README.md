@@ -19,7 +19,7 @@ This project is being built as a **prototype (MVP)** with scalability in mind, r
 - [📌 API Endpoints](#-api-endpoints)
 - [📥 Installation & Setup](#-installation--setup)
 - [🧪 Running Tests](#-running-tests)
-- [🐳 Docker Setup](#-docker-setup-)
+- [🐳 Docker Setup](#-docker-setup)
 - [📧 MailHog Setup](#-mailhog-setup-for-development)
 - [🎯 Project Goal](#-project-goal)
 - [🤝 Contributing](#-contributing)
@@ -163,7 +163,7 @@ You can either **build the image locally** or **pull it directly from Docker Hub
 **Option 1 – Build locally**
 ```bash
 docker build -t femcoders-mentor-hub .
-docker run -p 8080:8080 femcoders-mentor-hub
+docker-compose up -d
 ```
 
 **Option 2 – Use pre-built image from Docker Hub**
@@ -172,7 +172,7 @@ Pull the image with the latest tag:
 
 ```bash
 docker pull lizar22/femcoders-mentor-hub-app:latest
-docker run -p 8080:8080 lizar22/femcoders-mentor-hub-app:latest
+docker-compose up -d
 ```
 
 The API will be available at:
@@ -240,13 +240,11 @@ Please open an **issue** or **pull request** to collaborate 😊
 
 ## 📝 License
 
-This project is open source and is licensed under the [Apache License 2.0].
+This project is open source and is licensed under the Apache License 2.0
 
 Copyright 2025 FemCodersMentorHub.
 
 You are free to use, modify, and distribute this code, as long as you keep this notice and give proper credit to the original author.
-
-The license also covers any patents related to this project; all patent rights remain with the author.
 
 
 <br>
