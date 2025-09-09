@@ -1,0 +1,81 @@
+# Docker Compose configuration for DreamRoute testing with Maven image
+# This configuration runs tests using the official Maven Docker image
+# without building a custom container image
+
+services:
+  fcmh-test:
+    image: maven:3.9.11-eclipse-temurin-21
+
+    working_dir: /src
+
+    volumes:
+      - type: bind
+        source: .
+        target: /src
+        read_only: true
+
+    entrypoint: ["mvn", "-Ptest", "clean", "verify", "--no-transfer-progress"]
+
+    container_name: fcmh-test
+
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8080
+      - DB_URL=jdbc:mysql://test-db:3306/femcoders_mentor_hub
+      - DB_USERNAME=fcmh
+      - DB_PASSWORD=fcmh123
+
+    restart: no
+
+    depends_on:
+      test-db:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+    networks:
+      - test-network
+
+  test-db:
+    image: mysql:8.0
+
+    container_name: fcmh-test-db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: femcoders_mentor_hub
+
+    restart: no
+
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pfcmh" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    networks:
+      - test-network
+
+  mailhog:
+    image: mailhog/mailhog:latest
+
+    container_name: fcmh-test-mailhog
+
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # UI web
+
+    restart: no
+
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
