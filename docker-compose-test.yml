@@ -1,7 +1,3 @@
-# Docker Compose configuration for DreamRoute testing with Maven image
-# This configuration runs tests using the official Maven Docker image
-# without building a custom container image
-
 services:
   fcmh-test:
     image: maven:3.9.11-eclipse-temurin-21
