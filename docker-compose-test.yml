@@ -10,7 +10,7 @@ services:
         target: /src
         read_only: true
 
-    entrypoint: ["mvn", "-Ptest", "clean", "verify", "--no-transfer-progress"]
+    entrypoint: ["mvn", "-Ptest", "clean", "verify", "--no-transfer-progress",  "-Dparallel=false", "-DforkCount=1"]
 
     container_name: fcmh-test
 
