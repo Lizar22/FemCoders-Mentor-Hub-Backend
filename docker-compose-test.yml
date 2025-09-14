@@ -10,13 +10,12 @@ services:
         target: /src
         read_only: true
 
-    entrypoint: ["mvn", "-Ptest", "clean", "verify", "--no-transfer-progress"]
+    entrypoint: ["mvn", "-Ptest", "clean", "verify", "-Dspring.profiles.active=test", "--no-transfer-progress"]
 
     container_name: fcmh-test
 
     environment:
        - SPRING_PROFILES_ACTIVE=test
-       - JWT_SECRET_KEY=docker-compose-test
 
     restart: no
 
