@@ -16,7 +16,8 @@ services:
 
     environment:
        - SPRING_PROFILES_ACTIVE=test
-
+       - SERVER_PORT=5000
+       - JWT_SECRET_KEY=docker-compose-test
     restart: no
 
     depends_on:
