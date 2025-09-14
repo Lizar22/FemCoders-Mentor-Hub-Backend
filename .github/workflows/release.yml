@@ -18,15 +18,6 @@ jobs:
       - name: Run tests with docker-compose
         run: docker compose -f docker-compose-test.yml up --quiet-pull --abort-on-container-exit --exit-code-from fcmh-test
 
-      - name: Show detailed test results on failure
-        if: failure()
-        run: |
-            echo "📋 === LOGS DE CONTENEDOR ==="
-            docker compose -f docker-compose-test.yml logs fcmh-test
-            echo ""
-            echo "📋 === SUREFIRE REPORTS ==="
-            docker run --rm -v $(pwd):/workspace ubuntu:latest find /workspace -name "*.txt" -path "*/surefire-reports/*" -exec echo "=== {} ===" \; -exec cat {} \;
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -67,12 +58,12 @@ jobs:
       #     body: |
       #       ## Changes
       #
-      #       Docker image: `${{ secrets.DOCKER_USERNAME }}/ff5-dreamroute:${{ github.ref_name }}`
+      #       Docker image: `${{ secrets.DOCKER_USERNAME }}/femcoders-mentor-hub:${{ github.ref_name }}`
       #
       #       ## Installation
       #
       #       ```bash
-      #       docker pull ${{ secrets.DOCKER_USERNAME }}/ff5-dreamroute:${{ github.ref_name }}
+      #       docker pull ${{ secrets.DOCKER_USERNAME }}/femcoders-mentor-hub:${{ github.ref_name }}
       #       ```
 
       - name: Clean up
