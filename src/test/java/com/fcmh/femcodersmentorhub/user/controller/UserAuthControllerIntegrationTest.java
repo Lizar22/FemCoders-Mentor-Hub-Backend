@@ -76,7 +76,7 @@ public class UserAuthControllerIntegrationTest {
 
         apiHelper.performRequest(post(REGISTER_URL), newUser,"User registered successfully", HttpStatus.CREATED)
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data.username").value(TEST_EMAIL))
+                .andExpect(jsonPath("$.data.username").value(TEST_USERNAME))
                 .andExpect(jsonPath("$.data.email").value(TEST_EMAIL))
                 .andExpect(jsonPath("$.data.role").value(TEST_ROLE.toString()));
 
