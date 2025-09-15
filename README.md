@@ -4,16 +4,19 @@
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-green)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+[![Build](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/build.yml/badge.svg)](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/build.yml)
+[![Test](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/test.yml/badge.svg)](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/test.yml)
 
 **Femcoders Mentor Hub** is a platform designed to connect **mentors** with **mentees** in the tech field. Its goal is to create an inclusive, safe, and accessible space where women starting their programming careers can find guidance, support, and mentorship.
 
-It provides a safe and empowering space where mentors can share knowledge and mentees can grow professionally.  
+It provides a safe and empowering space where mentors can share knowledge and mentees can grow professionally.
 
 This project is being built as a **prototype (MVP)** with scalability in mind, ready to expand with new features in the future.
 
 <br>
 
 ## 📑 Table of Contents
+
 - [🚀 MVP Features](#-mvp-features)
 - [🛠️ Technologies & Tools](#-technologies--tools)
 - [📌 API Endpoints](#-api-endpoints)
@@ -26,16 +29,16 @@ This project is being built as a **prototype (MVP)** with scalability in mind, r
 - [📝 License](#-license)
 - [💜 Created with 💜 by Lizar22](#-created-with--by-lizar22-)
 
-
 <br>
 
 ## 🚀 MVP Features
+
 - **User registration and authentication** with JWT (roles: `MENTOR` and `MENTEE`).
-- **Mentor profiles**:  
-  - Public routes to explore all mentors or view a single mentor profile.  
-  - Private routes for each mentor to create, update, or delete their own profile.  
-- **Data validation** for DTOs (full name, technologies, level, bio).  
-- **Standardized error handling** using `@ControllerAdvice` and an `ErrorCode` system.  
+- **Mentor profiles**:
+  - Public routes to explore all mentors or view a single mentor profile.
+  - Private routes for each mentor to create, update, or delete their own profile.
+- **Data validation** for DTOs (full name, technologies, level, bio).
+- **Standardized error handling** using `@ControllerAdvice` and an `ErrorCode` system.
 - **Feature-based modular architecture** (`auth`, `mentors`, `requests`, `security`).
 
 <br>
@@ -43,81 +46,97 @@ This project is being built as a **prototype (MVP)** with scalability in mind, r
 ## 🛠️ Technologies & Tools
 
 ### Backend
-![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)  
+
+![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-6DB33F?logo=springboot&logoColor=white)
 
 ### Security
+
 ![Spring Security](https://img.shields.io/badge/Spring%20Security-JWT-6DB33F?logo=springsecurity&logoColor=white)
 
 ### Persistence
-![Hibernate](https://img.shields.io/badge/Hibernate-ORM-59666C?logo=hibernate&logoColor=white)  
-![MySQL](https://img.shields.io/badge/MySQL-Production-4479A1?logo=mysql&logoColor=white)  
+
+![Hibernate](https://img.shields.io/badge/Hibernate-ORM-59666C?logo=hibernate&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Production-4479A1?logo=mysql&logoColor=white)
 ![H2](https://img.shields.io/badge/H2-Testing-00599C?logo=databricks&logoColor=white)
 
 ### Testing
-![JUnit5](https://img.shields.io/badge/JUnit-5-25A162?logo=junit5&logoColor=white)  
-![Spring Boot Test](https://img.shields.io/badge/Spring%20Boot%20Test-Testing-blue)  
+
+![JUnit5](https://img.shields.io/badge/JUnit-5-25A162?logo=junit5&logoColor=white)
+![Spring Boot Test](https://img.shields.io/badge/Spring%20Boot%20Test-Testing-blue)
 ![MockMvc](https://img.shields.io/badge/MockMvc-Testing-blue)
 
 ### Email
-![Spring Mail](https://img.shields.io/badge/Spring%20Mail-Email-6DB33F?logo=spring&logoColor=white)  
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-Templates-005F0F?logo=thymeleaf&logoColor=white)  
+
+![Spring Mail](https://img.shields.io/badge/Spring%20Mail-Email-6DB33F?logo=spring&logoColor=white)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-Templates-005F0F?logo=thymeleaf&logoColor=white)
 ![MailHog](https://img.shields.io/badge/MailHog-Dev%20Mail-FF69B4)
 
 ### Documentation
-![OpenAPI](https://img.shields.io/badge/OpenAPI-3-6BA539?logo=openapiinitiative&logoColor=white)  
+
+![OpenAPI](https://img.shields.io/badge/OpenAPI-3-6BA539?logo=openapiinitiative&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-Docs-85EA2D?logo=swagger&logoColor=black)
 
 ### Validation
+
 ![Spring Validation](https://img.shields.io/badge/Spring%20Validation-BuiltIn-6DB33F?logo=spring&logoColor=white)
 
 ### Infrastructure & DevOps
-![Docker](https://img.shields.io/badge/Docker-Container-2496ED?logo=docker&logoColor=white)  
-![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Orchestration-2496ED?logo=docker&logoColor=white)  
+
+![Docker](https://img.shields.io/badge/Docker-Container-2496ED?logo=docker&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Orchestration-2496ED?logo=docker&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?logo=githubactions&logoColor=white)
 
 ### Utilities
+
 ![Lombok](https://img.shields.io/badge/Lombok-Java%20Helper-BC2C1A)
 
 ### Design & Workflow
-![Canva](https://img.shields.io/badge/Canva-Design-00C4CC?logo=canva&logoColor=white)  
-![Jira](https://img.shields.io/badge/Jira-Project%20Management-0052CC?logo=jira&logoColor=white)  
-![Confluence](https://img.shields.io/badge/Confluence-Docs-85EA2D?logo=swagger&logoColor=black)  
-![Figma](https://img.shields.io/badge/Figma-Design-00C4CC?logo=canva&logoColor=white)  
-![dbdiagram.io](https://img.shields.io/badge/dbdiagram.io-ERD-FF9900)
 
+![Canva](https://img.shields.io/badge/Canva-Design-00C4CC?logo=canva&logoColor=white)
+![Jira](https://img.shields.io/badge/Jira-Project%20Management-0052CC?logo=jira&logoColor=white)
+![Confluence](https://img.shields.io/badge/Confluence-Docs-85EA2D?logo=swagger&logoColor=black)
+![Figma](https://img.shields.io/badge/Figma-Design-00C4CC?logo=canva&logoColor=white)
+![dbdiagram.io](https://img.shields.io/badge/dbdiagram.io-ERD-FF9900)
 
 <br>
 
 ## 📌 API Endpoints
 
 ### 🔑 Authentication
-| Method   | Endpoint              | Description                     | Auth | Role |
-|----------|----------------------|---------------------------------|------|------|
-| **POST** | `/api/auth/register`  | Register a new user (mentor or mentee) | ![No](https://img.shields.io/badge/Auth-No-red) | N/A |
-| **POST** | `/api/auth/login`     | Login with username/email + password | ![No](https://img.shields.io/badge/Auth-No-red) | N/A |
+
+
+| Method   | Endpoint             | Description                            | Auth                                            | Role |
+| -------- | -------------------- | -------------------------------------- | ----------------------------------------------- | ---- |
+| **POST** | `/api/auth/register` | Register a new user (mentor or mentee) | ![No](https://img.shields.io/badge/Auth-No-red) | N/A  |
+| **POST** | `/api/auth/login`    | Login with username/email + password   | ![No](https://img.shields.io/badge/Auth-No-red) | N/A  |
 
 ### 👩‍🏫 Mentor Profiles
-| Method     | Endpoint           | Description                         | Auth | Role |
-|------------|------------------|-------------------------------------|------|------|
-| **GET**    | `/api/mentors`     | List all mentors                    | ![No](https://img.shields.io/badge/Auth-No-red) | N/A |
-| **GET**    | `/api/mentors/{id}`| Get mentor profile by ID            | ![No](https://img.shields.io/badge/Auth-No-red) | N/A |
-| **POST**   | `/api/mentors`     | Create mentor profile (self)        | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
-| **PUT**    | `/api/mentors/me`  | Update authenticated mentor profile | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
-| **DELETE** | `/api/mentors/me`  | Delete authenticated mentor profile | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
+
+
+| Method     | Endpoint            | Description                         | Auth                                                | Role                                                     |
+| ---------- | ------------------- | ----------------------------------- | --------------------------------------------------- | -------------------------------------------------------- |
+| **GET**    | `/api/mentors`      | List all mentors                    | ![No](https://img.shields.io/badge/Auth-No-red)     | N/A                                                      |
+| **GET**    | `/api/mentors/{id}` | Get mentor profile by ID            | ![No](https://img.shields.io/badge/Auth-No-red)     | N/A                                                      |
+| **POST**   | `/api/mentors`      | Create mentor profile (self)        | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
+| **PUT**    | `/api/mentors/me`   | Update authenticated mentor profile | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
+| **DELETE** | `/api/mentors/me`   | Delete authenticated mentor profile | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
 
 ### 📩 Mentoring Requests
-| Method     | Endpoint                                   | Description                                   | Auth | Role |
-|------------|-------------------------------------------|-----------------------------------------------|------|------|
-| **GET**    | `/api/mentoring-requests`                  | List mentoring requests for the user          | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) / ![Mentee](https://img.shields.io/badge/Role-MENTEE-purple) |
-| **POST**   | `/api/mentoring-requests`                  | Create a new mentoring request                | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentee](https://img.shields.io/badge/Role-MENTEE-purple) |
-| **PUT**    | `/api/mentoring-requests/{id}/respond`    | Respond to a mentoring request (accept/decline) | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) |
+
+
+| Method   | Endpoint                               | Description                                     | Auth                                                | Role                                                                                                                  |
+| -------- | -------------------------------------- | ----------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **GET**  | `/api/mentoring-requests`              | List mentoring requests for the user            | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue) / ![Mentee](https://img.shields.io/badge/Role-MENTEE-purple) |
+| **POST** | `/api/mentoring-requests`              | Create a new mentoring request                  | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentee](https://img.shields.io/badge/Role-MENTEE-purple)                                                            |
+| **PUT**  | `/api/mentoring-requests/{id}/respond` | Respond to a mentoring request (accept/decline) | ![Yes](https://img.shields.io/badge/Auth-Yes-green) | ![Mentor](https://img.shields.io/badge/Role-MENTOR-blue)                                                              |
 
 <br>
 
 ## 📥 Installation & Setup
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/your-username/femcoders-mentor-hub.git
 cd femcoders-mentor-hub
@@ -156,11 +175,12 @@ JWT_SECRET=yourjwtsecret
 
 <br>
 
-## 🐳 Docker Setup 
+## 🐳 Docker Setup
 
 You can either **build the image locally** or **pull it directly from Docker Hub**.
 
 **Option 1 – Build locally**
+
 ```bash
 docker build -t femcoders-mentor-hub .
 docker-compose up -d
@@ -171,7 +191,7 @@ docker-compose up -d
 Pull the image with the latest tag:
 
 ```bash
-docker pull lizar22/femcoders-mentor-hub-app:latest
+docker pull lizar22/femcoders-mentor-hub:latest
 docker-compose up -d
 ```
 
@@ -211,6 +231,86 @@ No real emails will be sent outside your local environment.
 
 <br>
 
+## 🔄 CI/CD Workflows
+
+This project uses **GitHub Actions** to automate build, testing, and release tasks. Think of the workflows as a virtual assistant that checks your code every time you make changes.
+
+### 1. 🏗️ Build Workflow
+
+**File**: `.github/workflows/build.yml`
+
+Runs automatically when:
+
+* You push to `main` or `develop`
+* You open or update a Pull Request
+* Manually from the "Actions" tab
+
+### 2. ✅ Test Workflow
+
+**File**: `.github/workflows/test.yml`
+
+Runs automatically when:
+
+* You push to `main` or `develop`
+* You open or update a Pull Request
+* Manually from the "Actions" tab
+
+### 3. 🚀 Release Workflow
+
+**File**: `.github/workflows/release.yml`
+
+Runs when:
+
+* You create a tag starting with `v` (example: `v0.0.1`)
+
+## 🚦 Workflow Status
+
+[![Build](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/build.yml/badge.svg)](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/build.yml)
+[![Test](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/test.yml/badge.svg)](https://github.com/Lizar22/Femcoders-Mentor-Hub-Backend/actions/workflows/test.yml)
+
+## 📝 Secrets Configuration
+
+For the workflows to work properly, you need to configure these secrets in your GitHub repository:
+
+1. Go to **Settings** → **Secrets and variables** → **Actions**
+2. Add the following secrets:
+
+
+| Secret            | Description              | Example           |
+| ----------------- | ------------------------ | ----------------- |
+| `DOCKER_USERNAME` | Your Docker Hub username | `lizar22`         |
+| `DOCKER_PASSWORD` | Your Docker Hub token    | `dckr_pat_xxx...` |
+
+## 🎯 How to Create a Release
+
+```bash
+# 1. Make sure you are on main and up to date
+git checkout main
+git pull origin main
+
+# 2. Create and push the tag
+git tag v0.0.1
+git push origin v0.0.1
+```
+
+The workflow will run automatically and will:
+
+* Build the JAR
+* Create Docker images
+* Push them to Docker Hub
+* Create a GitHub release
+
+## 🐛 Debugging Workflows
+
+If something fails:
+
+1. **Go to the "Actions" tab** in your repository
+2. **Find the failed workflow** (it will appear with ❌)
+3. **Click on it** to see detailed logs
+4. **Check each step** to locate the error
+
+<br>
+
 ## 🎯 Project Goal
 
 The purpose of this project is to serve as a **functional MVP** for an inclusive mentorship platform.
@@ -221,7 +321,6 @@ The architecture allows scalability for future features, such as:
 * View mentoring sessions in calendar
 * Mentor-mentee matching system
 * Secure internal messaging
-
 
 <br>
 
@@ -244,12 +343,9 @@ This project is open source and is licensed under the Apache License 2.0
 
 Copyright 2025 FemCodersMentorHub.
 
-You are free to use, modify, and distribute this code, as long as you keep this notice and give proper credit to the original author.
-
-
 <br>
 
-## 💜 Created with 💜 by Lizar22 
+## 💜 Created with 💜 by Lizar22
 
 **FemCoders Mentor Hub** is a respectful, inclusive, and scalable mentorship platform designed to amplify and support **women’s voices in tech**.
 
